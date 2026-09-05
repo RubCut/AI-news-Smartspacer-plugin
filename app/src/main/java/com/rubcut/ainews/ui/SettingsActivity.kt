@@ -208,7 +208,7 @@ class SettingsActivity : AppCompatActivity() {
                     keyStatus.visibility = View.VISIBLE
                     keyStatus.text = getString(R.string.key_ok, models.size)
                     keyStatus.setTextColor(
-                        MaterialColors.getColor(keyStatus, com.google.android.material.R.attr.colorPrimary)
+                        MaterialColors.getColor(keyStatus, androidx.appcompat.R.attr.colorPrimary)
                     )
                     snack(getString(R.string.key_ok, models.size))
                 },
@@ -216,7 +216,7 @@ class SettingsActivity : AppCompatActivity() {
                     keyStatus.visibility = View.VISIBLE
                     keyStatus.text = getString(R.string.key_failed, error.message ?: "unknown")
                     keyStatus.setTextColor(
-                        MaterialColors.getColor(keyStatus, com.google.android.material.R.attr.colorError)
+                        MaterialColors.getColor(keyStatus, androidx.appcompat.R.attr.colorError)
                     )
                     snack(getString(R.string.key_failed, error.message ?: "unknown"))
                 }

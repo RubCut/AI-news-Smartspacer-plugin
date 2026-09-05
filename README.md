@@ -7,7 +7,9 @@ headline and the story itself.
 * The target shows the **short headline**.
 * The line underneath (the complication line) always reads **"Tap to view full"**.
 * Tapping opens a **full screen** article with a large collapsing headline,
-  source, date and the story text.
+  source, date and the story text. The body is written in **GitHub flavoured
+  Markdown** (bold, italics, strikethrough, headings, bullet and numbered lists,
+  quotes, inline code, code blocks, rules and links) and rendered as styled text.
 * Bottom bar: **Close & dismiss** (left — closes and removes the target from
   Smartspacer) and **Close** (right — just closes the window). Dismissing every
   story hides the target completely until the next generation. If the feed gave a
@@ -26,6 +28,8 @@ There is **no launcher app**: everything is configured from inside the target
   which verifies it against the API before you generate anything.
 * **Language of the stories** — defaults to the device language.
 * **Update interval** — 15 minutes to 8 hours (`refreshPeriodMinutes`).
+* **Article length** — Short / Medium / Long; longer articles get section
+  headings and lists, with a matching output token budget.
 * **Stories on the smartspace** — 1 to 5 targets at a time.
 * **Restore dismissed stories** — brings back stories removed with dismiss.
 
@@ -39,6 +43,8 @@ app/src/main/java/com/rubcut/ainews/
 ├── Constants.kt              # authority, defaults, limits
 ├── NewsItem.kt               # story model
 ├── AiProvider.kt             # AI backends (Gemini for now)
+├── StoryLength.kt            # short/medium/long prompt + token budget
+├── MarkdownRenderer.kt       # GitHub flavoured Markdown -> spans
 ├── GeminiClient.kt           # Gemini REST call with a JSON response schema
 ├── NewsUpdater.kt            # generate + store for one target instance
 ├── NewsUpdateReceiver.kt     # periodic refresh broadcast from Smartspacer

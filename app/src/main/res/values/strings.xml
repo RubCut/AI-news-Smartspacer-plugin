@@ -1,11 +1,47 @@
 <resources>
     <string name="app_name">AI News</string>
+    <string name="settings_activity_label">AI News settings</string>
+
     <string name="target_label">AI News</string>
-    <string name="target_description">Shows the latest AI news headline on your smartspace</string>
+    <string name="target_description">Shows the latest news headline on your smartspace, tap to read the full story</string>
     <string name="tap_to_view_full">Tap to view full</string>
+    <string name="target_empty_title">AI News</string>
+    <string name="target_empty_subtitle">Tap to set up your feed</string>
+
+    <string name="settings_title">AI News</string>
+    <string name="settings_feed_label">RSS / Atom feed</string>
+    <string name="settings_feed_hint">https://example.com/rss</string>
+    <string name="settings_use_default">Use default AI feed</string>
+    <string name="settings_interval_label">Update interval</string>
+    <string name="settings_stories_label">Stories on the smartspace</string>
+    <string name="settings_restore">Restore dismissed stories</string>
+    <string name="settings_save">Save and refresh</string>
+
+    <string name="status_updated">Updated %1$s · %2$d story(s) shown</string>
+    <string name="status_never_updated">Not updated yet</string>
+
     <string name="close_and_dismiss">Close &amp; dismiss</string>
     <string name="close">Close</string>
-    <string name="main_hint">Add the "AI News" target in Smartspacer to see headlines on your home screen.</string>
-    <string name="restore_targets">Restore dismissed targets</string>
-    <string name="add_test_story">Add test story</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="no_article_text">No article text was provided by the feed. Open it in the browser to read more.</string>
+
+    <string name="toast_saved">Saved</string>
+    <string name="toast_restored">Dismissed stories restored</string>
+
+    <string name="error_no_feed">No feed URL set — open the settings</string>
+    <string name="error_empty_feed">Feed has no stories</string>
+    <string name="error_fetch_failed">Update failed: %1$s</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="stories">
+        <item quantity="one">%d story</item>
+        <item quantity="other">%d stories</item>
+    </plurals>
 </resources>

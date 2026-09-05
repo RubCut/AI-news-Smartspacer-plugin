@@ -1,57 +1,91 @@
 package com.rubcut.ainews.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.DynamicColors
+import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
 import com.kieronquinn.app.smartspacer.sdk.provider.SmartspacerTargetProvider
-import com.rubcut.ainews.data.NewsRepository
-import com.rubcut.ainews.databinding.ActivityNewsBinding
-import com.rubcut.ainews.providers.NewsTargetProvider
+import com.rubcut.ainews.R
+import com.rubcut.ainews.SettingsRepository
+import com.rubcut.ainews.targets.NewsTarget
 import java.text.DateFormat
 import java.util.Date
 
 /**
- * Full article view opened when the Smartspacer target is tapped.
- * Bottom bar: "Close & dismiss" (left) removes the target, "Close" just closes.
+ * Full article view opened by tapping the target.
+ *
+ * Bottom bar: "Close & dismiss" on the left removes the target from Smartspacer,
+ * "Close" simply closes this window.
  */
 class NewsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityNewsBinding
     private var newsId: String? = null
     private var smartspacerId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityNewsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_news)
 
         newsId = intent.getStringExtra(EXTRA_NEWS_ID)
-        smartspacerId = intent.getStringExtra(EXTRA_SMARTSPACER_ID)
+        smartspacerId = intent.getStringExtra(SmartspacerConstants.EXTRA_SMARTSPACER_ID)
 
-        val item = newsId?.let { NewsRepository.get(this, it) }
-        if (item == null) {
+        val settings = smartspacerId?.let { SettingsRepository(this).forTarget(it) }
+        val story = newsId?.let { settings?.getStory(it) }
+        if (story == null) {
             finish()
             return
         }
 
-        binding.newsTitle.text = item.title
-        binding.newsBody.text = item.body
-        binding.newsMeta.text = listOfNotNull(
-            item.source.takeIf { it.isNotBlank() },
+        findViewById<TextView>(R.id.newsTitle).text = story.title
+        findViewById<TextView>(R.id.newsMeta).text = listOfNotNull(
+            story.source.takeIf { it.isNotBlank() },
             DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
-                .format(Date(item.timestamp))
+                .format(Date(story.timestamp))
         ).joinToString(" · ")
 
-        binding.buttonDismiss.setOnClickListener {
-            newsId?.let { id -> NewsRepository.dismiss(this, id) }
-            SmartspacerTargetProvider.notifyChange(this, NewsTargetProvider::class.java)
+        val body = findViewById<TextView>(R.id.newsBody)
+        body.text = story.body.ifBlank { getString(R.string.no_article_text) }
+
+        val openButton = findViewById<MaterialButton>(R.id.buttonOpen)
+        val url = story.url
+        if (url.isNullOrBlank()) {
+            openButton.visibility = View.GONE
+        } else {
+            openButton.setOnClickListener {
+                runCatching {
+                    startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                }
+                finish()
+            }
+        }
+
+        // Left button: close and remove the target from the smartspace.
+        findViewById<MaterialButton>(R.id.buttonDismiss).setOnClickListener {
+            val id = newsId
+            val targetId = smartspacerId
+            if (settings != null && id != null && targetId != null) {
+                settings.dismiss(id)
+                SmartspacerTargetProvider.notifyChange(
+                    this, NewsTarget::class.java, targetId
+                )
+            }
             finish()
         }
 
-        binding.buttonClose.setOnClickListener { finish() }
+        // Right button: just close.
+        findViewById<MaterialButton>(R.id.buttonClose).setOnClickListener { finish() }
     }
 
     companion object {
         const val EXTRA_NEWS_ID = "news_id"
-        const val EXTRA_SMARTSPACER_ID = "smartspacer_id"
     }
 }

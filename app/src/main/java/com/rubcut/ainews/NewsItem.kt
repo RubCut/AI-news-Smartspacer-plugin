@@ -1,10 +1,10 @@
-package com.rubcut.ainews.data
+package com.rubcut.ainews
 
 data class NewsItem(
     val id: String,
     /** Short headline shown on the Smartspacer target. */
     val shortTitle: String,
-    /** Full, human readable headline shown in the news activity. */
+    /** Full headline shown in the article screen. */
     val title: String,
     val body: String,
     val source: String = "",

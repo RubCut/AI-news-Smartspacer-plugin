@@ -10,9 +10,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://jitpack.io")
     }
 }
 
-rootProject.name = "AI News Smartspacer Plugin"
+rootProject.name = "AiNewsSmartspacerPlugin"
 include(":app")

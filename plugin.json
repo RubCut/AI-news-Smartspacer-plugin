@@ -1,0 +1,9 @@
+{
+	"description": "Adds a news target. It shows a short headline on your smartspace with a \"Tap to view full\" line underneath; tapping opens the full story with two buttons: close & dismiss the target, or just close. Any RSS/Atom feed can be used, with a configurable update interval.",
+	"download_url": "https://github.com/RubCut/AI-news-Smartspacer-plugin/releases/latest/download/app-debug.apk",
+	"version_code": 1,
+	"changelog": "- First release: **AI News target** with short headline + **Tap to view full** line\n- Full article screen with **Close & dismiss** and **Close** buttons\n- Per-target settings: **feed URL**, **update interval** (15 min – 8 h) and **number of stories**",
+	"required_package": "com.kieronquinn.app.smartspacer",
+	"minimum_smartspacer_version": 0,
+	"screenshots": []
+}

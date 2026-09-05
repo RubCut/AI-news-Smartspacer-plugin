@@ -1,3 +1,36 @@
 <resources>
-    <color name="ic_launcher_background">#1B5E9B</color>
+    <color name="launcher_background">#303236</color>
+    <color name="seed">#006C4C</color>
+    <color name="primary">#006C4C</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#89F8C7</color>
+    <color name="on_primary_container">#002116</color>
+    <color name="secondary">#4D6358</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#CFE9DA</color>
+    <color name="on_secondary_container">#092017</color>
+    <color name="tertiary">#3D6373</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    <color name="tertiary_container">#C1E8FB</color>
+    <color name="on_tertiary_container">#001F2A</color>
+    <color name="surface">#F6FBF6</color>
+    <color name="on_surface">#171D1A</color>
+    <color name="surface_variant">#DBE5DE</color>
+    <color name="on_surface_variant">#404943</color>
+    <color name="surface_dim">#DEE3DD</color>
+    <color name="surface_bright">#FCFEFC</color>
+    <color name="surface_container_lowest">#FFFFFF</color>
+    <color name="surface_container_low">#F0F5F0</color>
+    <color name="surface_container">#EAEFEA</color>
+    <color name="surface_container_high">#E4E9E4</color>
+    <color name="surface_container_highest">#DEE3DF</color>
+    <color name="outline">#667067</color>
+    <color name="outline_variant">#BFC9C1</color>
+    <color name="inverse_surface">#2B322F</color>
+    <color name="inverse_on_surface">#ECF2EC</color>
+    <color name="inverse_primary">#6DDBAC</color>
+    <color name="error">#BA1A1A</color>
+    <color name="on_error">#FFFFFF</color>
+    <color name="error_container">#FFDAD6</color>
+    <color name="on_error_container">#410002</color>
 </resources>

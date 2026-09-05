@@ -1,5 +1,8 @@
 package com.rubcut.ainews
 
+/** Repository of this plugin, shown in the about section and sent to OpenRouter. */
+const val PROJECT_URL = "https://github.com/RubCut/AI-news-Smartspacer-plugin"
+
 /**
  * A backend that can write the news.
  *
@@ -188,8 +191,6 @@ enum class AiProvider(
     );
 
     companion object {
-        const val PROJECT_URL = "https://github.com/RubCut/AI-news-Smartspacer-plugin"
-
         fun fromId(id: String?) = entries.firstOrNull { it.id == id } ?: GEMINI
         fun fromLabel(label: String?) = entries.firstOrNull { it.label == label }
     }

@@ -81,7 +81,7 @@ internal object OpenAiClient {
         if (config.apiKey.isNotBlank()) put("Authorization", "Bearer ${config.apiKey}")
         if (config.provider == AiProvider.OPENROUTER) {
             // OpenRouter asks clients to identify themselves.
-            put("HTTP-Referer", AiProvider.PROJECT_URL)
+            put("HTTP-Referer", PROJECT_URL)
             put("X-Title", "AI News plugin")
         }
     }

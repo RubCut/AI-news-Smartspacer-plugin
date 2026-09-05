@@ -31,6 +31,7 @@ import com.rubcut.ainews.AiProvider
 import com.rubcut.ainews.BuildConfig
 import com.rubcut.ainews.Constants
 import com.rubcut.ainews.NewsUpdater
+import com.rubcut.ainews.PROJECT_URL
 import com.rubcut.ainews.R
 import com.rubcut.ainews.SettingsRepository
 import com.rubcut.ainews.toClientConfig
@@ -138,7 +139,7 @@ class SettingsActivity : AppCompatActivity() {
         getKeyButton = findViewById(R.id.buttonGetKey)
         getKeyButton.setOnClickListener { openLink(settings.aiProvider.apiKeyUrl) }
         findViewById<MaterialButton>(R.id.buttonRepository).setOnClickListener {
-            openLink(AiProvider.PROJECT_URL)
+            openLink(PROJECT_URL)
         }
         findViewById<TextView>(R.id.aboutVersion).text =
             getString(R.string.about_version, BuildConfig.VERSION_NAME)

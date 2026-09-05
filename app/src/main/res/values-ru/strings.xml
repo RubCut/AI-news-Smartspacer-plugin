@@ -1,0 +1,96 @@
+<resources>
+    <string name="app_name">AI News plugin</string>
+    <string name="settings_activity_label">Настройки AI News</string>
+
+    <string name="target_label">AI News</string>
+    <string name="target_description">Задайте тему — нейросеть напишет новости для вашего смартспейса</string>
+    <string name="tap_to_view_full">Нажмите, чтобы открыть</string>
+    <string name="target_empty_title">AI News</string>
+    <string name="target_empty_subtitle">Нажмите, чтобы задать тему</string>
+
+    <string name="settings_title">AI News</string>
+    <string name="settings_subtitle">Укажите тему — модель напишет краткий заголовок, полный заголовок и саму новость.</string>
+    <string name="settings_topic_label">Тема</string>
+    <string name="settings_topic_helper">Например: искусственный интеллект, Формула-1, космос</string>
+    <string name="settings_provider_label">Провайдер ИИ</string>
+    <string name="settings_model_label">Модель</string>
+    <string name="settings_key_label">API-ключ %1$s</string>
+    <string name="settings_key_optional">Для этого провайдера необязателен</string>
+    <string name="settings_base_url_label">Базовый URL API</string>
+    <string name="settings_base_url_helper">Например: http://192.168.1.10:11434/v1</string>
+    <string name="settings_get_key">Получить ключ %1$s</string>
+    <string name="settings_test_key">Проверить ключ</string>
+    <string name="settings_fetch_models">Загрузить модели</string>
+    <string name="settings_testing">Проверка ключа…</string>
+    <string name="settings_fetching_models">Загрузка моделей…</string>
+    <string name="settings_section_topic">О чём писать</string>
+    <string name="settings_section_model">Нейросеть</string>
+    <string name="key_ok">Подключение работает · доступно моделей: %1$d</string>
+    <string name="key_failed">Ошибка проверки: %1$s</string>
+    <string name="models_loaded">Загружено моделей: %1$d</string>
+    <string name="models_empty">Для этого ключа нет доступных моделей</string>
+    <string name="settings_language_label">Язык новостей</string>
+    <string name="settings_interval_label">Интервал обновления</string>
+    <string name="settings_stories_label">Новостей на смартспейсе</string>
+    <string name="settings_length_label">Длина статьи</string>
+    <string name="settings_length_helper">В длинных статьях появляются заголовки и списки Markdown.</string>
+    <string name="length_short">Короткая</string>
+    <string name="length_medium">Средняя</string>
+    <string name="length_long">Длинная</string>
+    <string name="settings_restore">Вернуть скрытые новости</string>
+    <string name="settings_save">Сохранить и сгенерировать</string>
+    <string name="settings_generating">Генерация…</string>
+
+    <string name="about_title">О плагине</string>
+    <string name="about_version">Версия %1$s</string>
+    <string name="about_description">AI News добавляет в Smartspacer таргет, который пишет новости за вас. Укажите тему, выберите провайдера ИИ — Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen и другие совместимые API — и модель сгенерирует краткий заголовок для смартспейса и полную статью, которую можно читать со свайпом.</string>
+    <string name="about_disclaimer">Не является официальным продуктом Smartspacer или какого-либо провайдера ИИ. Сгенерированные новости могут содержать неточности.</string>
+    <string name="about_repository">Открыть репозиторий на GitHub</string>
+
+    <string name="status_updated">Сгенерировано %1$s · показано новостей: %2$d</string>
+    <string name="status_never_generated">Пока ничего не сгенерировано</string>
+
+    <string name="close_and_dismiss">Закрыть и убрать</string>
+    <string name="close">Закрыть</string>
+    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="no_article_text">Модель не вернула текст для этой новости.</string>
+
+    <string name="toast_generated">Новости сгенерированы</string>
+    <string name="toast_restored">Скрытые новости возвращены</string>
+
+    <string name="error_no_key">Укажите API-ключ в настройках</string>
+    <string name="error_no_topic">Задайте тему в настройках</string>
+    <string name="error_no_base_url">Укажите базовый URL API в настройках</string>
+    <string name="error_no_model">Выберите модель в настройках</string>
+    <string name="error_no_browser">Нет приложения для открытия ссылки</string>
+    <string name="error_empty_result">Модель не вернула ни одной новости</string>
+    <string name="error_generation_failed">Ошибка генерации: %1$s</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минуты</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
+        <item quantity="other">%d часа</item>
+    </plurals>
+    <string name="page_counter">%1$d из %2$d</string>
+
+    <plurals name="stories_to_read">
+        <item quantity="one">%d новость для прочтения</item>
+        <item quantity="few">%d новости для прочтения</item>
+        <item quantity="many">%d новостей для прочтения</item>
+        <item quantity="other">%d новости для прочтения</item>
+    </plurals>
+
+    <plurals name="stories">
+        <item quantity="one">%d новость</item>
+        <item quantity="few">%d новости</item>
+        <item quantity="many">%d новостей</item>
+        <item quantity="other">%d новости</item>
+    </plurals>
+</resources>

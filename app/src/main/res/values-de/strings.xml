@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">AI News plugin</string>
+    <string name="settings_activity_label">AI-News-Einstellungen</string>
+
+    <string name="target_label">AI News</string>
+    <string name="target_description">Thema wählen — eine KI schreibt die Nachrichten für deinen Smartspace</string>
+    <string name="tap_to_view_full">Tippen zum Öffnen</string>
+    <string name="target_empty_title">AI News</string>
+    <string name="target_empty_subtitle">Tippen, um ein Thema festzulegen</string>
+
+    <string name="settings_title">AI News</string>
+    <string name="settings_subtitle">Gib ein Thema ein und das Modell schreibt eine Kurzüberschrift, eine volle Überschrift und den Artikel.</string>
+    <string name="settings_topic_label">Thema</string>
+    <string name="settings_topic_helper">Zum Beispiel: künstliche Intelligenz, Formel 1, Raumfahrt</string>
+    <string name="settings_provider_label">KI-Anbieter</string>
+    <string name="settings_model_label">Modell</string>
+    <string name="settings_key_label">%1$s API-Schlüssel</string>
+    <string name="settings_key_optional">Für diesen Anbieter optional</string>
+    <string name="settings_base_url_label">API-Basis-URL</string>
+    <string name="settings_base_url_helper">Zum Beispiel: http://192.168.1.10:11434/v1</string>
+    <string name="settings_get_key">%1$s-Schlüssel holen</string>
+    <string name="settings_test_key">Schlüssel testen</string>
+    <string name="settings_fetch_models">Modelle laden</string>
+    <string name="settings_testing">Schlüssel wird geprüft…</string>
+    <string name="settings_fetching_models">Modelle werden geladen…</string>
+    <string name="settings_section_topic">Worüber geschrieben wird</string>
+    <string name="settings_section_model">KI-Backend</string>
+    <string name="key_ok">Verbindung funktioniert · %1$d Modelle verfügbar</string>
+    <string name="key_failed">Prüfung fehlgeschlagen: %1$s</string>
+    <string name="models_loaded">%1$d Modelle geladen</string>
+    <string name="models_empty">Für diesen Schlüssel gibt es keine nutzbaren Modelle</string>
+    <string name="settings_language_label">Sprache der Nachrichten</string>
+    <string name="settings_interval_label">Aktualisierungsintervall</string>
+    <string name="settings_stories_label">Nachrichten im Smartspace</string>
+    <string name="settings_length_label">Artikellänge</string>
+    <string name="settings_length_helper">Längere Artikel nutzen Markdown-Überschriften und Listen.</string>
+    <string name="length_short">Kurz</string>
+    <string name="length_medium">Mittel</string>
+    <string name="length_long">Lang</string>
+    <string name="settings_restore">Ausgeblendete Nachrichten zurückholen</string>
+    <string name="settings_save">Speichern und generieren</string>
+    <string name="settings_generating">Wird generiert…</string>
+
+    <string name="about_title">Über das Plugin</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_description">AI News fügt Smartspacer ein Target hinzu, das Nachrichten für dich schreibt. Gib ein Thema ein, wähle einen KI-Anbieter — Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen und weitere kompatible APIs — und das Modell erzeugt eine Kurzüberschrift für den Smartspace sowie einen vollständigen Artikel zum Durchblättern.</string>
+    <string name="about_disclaimer">Kein offizielles Produkt von Smartspacer oder eines KI-Anbieters. Generierte Nachrichten können Fehler enthalten.</string>
+    <string name="about_repository">Repository auf GitHub öffnen</string>
+
+    <string name="status_updated">Generiert %1$s · %2$d Nachricht(en) sichtbar</string>
+    <string name="status_never_generated">Noch nichts generiert</string>
+
+    <string name="close_and_dismiss">Schließen &amp; entfernen</string>
+    <string name="close">Schließen</string>
+    <string name="open_in_browser">Im Browser öffnen</string>
+    <string name="no_article_text">Das Modell hat keinen Text für diese Nachricht geliefert.</string>
+
+    <string name="toast_generated">Nachrichten generiert</string>
+    <string name="toast_restored">Ausgeblendete Nachrichten zurückgeholt</string>
+
+    <string name="error_no_key">Trage deinen API-Schlüssel in den Einstellungen ein</string>
+    <string name="error_no_topic">Lege ein Thema in den Einstellungen fest</string>
+    <string name="error_no_base_url">Trage die API-Basis-URL in den Einstellungen ein</string>
+    <string name="error_no_model">Wähle ein Modell in den Einstellungen</string>
+    <string name="error_no_browser">Keine App kann diesen Link öffnen</string>
+    <string name="error_empty_result">Das Modell hat keine Nachrichten geliefert</string>
+    <string name="error_generation_failed">Generierung fehlgeschlagen: %1$s</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minuten</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d Stunde</item>
+        <item quantity="other">%d Stunden</item>
+    </plurals>
+    <string name="page_counter">%1$d von %2$d</string>
+
+    <plurals name="stories_to_read">
+        <item quantity="one">%d Nachricht zu lesen</item>
+        <item quantity="other">%d Nachrichten zu lesen</item>
+    </plurals>
+
+    <plurals name="stories">
+        <item quantity="one">%d Nachricht</item>
+        <item quantity="other">%d Nachrichten</item>
+    </plurals>
+</resources>

@@ -1,0 +1,88 @@
+<resources>
+    <string name="app_name">AI News plugin</string>
+    <string name="settings_activity_label">Configurações do AI News</string>
+
+    <string name="target_label">AI News</string>
+    <string name="target_description">Escolha um tema e uma IA escreve as notícias para o seu smartspace</string>
+    <string name="tap_to_view_full">Toque para abrir</string>
+    <string name="target_empty_title">AI News</string>
+    <string name="target_empty_subtitle">Toque para definir um tema</string>
+
+    <string name="settings_title">AI News</string>
+    <string name="settings_subtitle">Escreva um tema e o modelo gera um título curto, um título completo e o artigo.</string>
+    <string name="settings_topic_label">Tema</string>
+    <string name="settings_topic_helper">Por exemplo: inteligência artificial, Fórmula 1, espaço</string>
+    <string name="settings_provider_label">Provedor de IA</string>
+    <string name="settings_model_label">Modelo</string>
+    <string name="settings_key_label">Chave de API do %1$s</string>
+    <string name="settings_key_optional">Opcional para este provedor</string>
+    <string name="settings_base_url_label">URL base da API</string>
+    <string name="settings_base_url_helper">Por exemplo: http://192.168.1.10:11434/v1</string>
+    <string name="settings_get_key">Obter uma chave do %1$s</string>
+    <string name="settings_test_key">Testar a chave</string>
+    <string name="settings_fetch_models">Carregar modelos</string>
+    <string name="settings_testing">Verificando a chave…</string>
+    <string name="settings_fetching_models">Carregando modelos…</string>
+    <string name="settings_section_topic">Sobre o que escrever</string>
+    <string name="settings_section_model">Motor de IA</string>
+    <string name="key_ok">Conexão funcionando · %1$d modelos disponíveis</string>
+    <string name="key_failed">Falha na verificação: %1$s</string>
+    <string name="models_loaded">%1$d modelos carregados</string>
+    <string name="models_empty">Esta chave não tem modelos utilizáveis</string>
+    <string name="settings_language_label">Idioma das notícias</string>
+    <string name="settings_interval_label">Intervalo de atualização</string>
+    <string name="settings_stories_label">Notícias no smartspace</string>
+    <string name="settings_length_label">Tamanho do artigo</string>
+    <string name="settings_length_helper">Artigos longos usam títulos e listas em Markdown.</string>
+    <string name="length_short">Curto</string>
+    <string name="length_medium">Médio</string>
+    <string name="length_long">Longo</string>
+    <string name="settings_restore">Restaurar notícias ocultas</string>
+    <string name="settings_save">Salvar e gerar</string>
+    <string name="settings_generating">Gerando…</string>
+
+    <string name="about_title">Sobre o plugin</string>
+    <string name="about_version">Versão %1$s</string>
+    <string name="about_description">O AI News adiciona ao Smartspacer um target que escreve as notícias por você. Digite um tema, escolha um provedor de IA — Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen e outras APIs compatíveis — e o modelo gera um título curto para o smartspace e um artigo completo para deslizar.</string>
+    <string name="about_disclaimer">Não é um produto oficial do Smartspacer nem de qualquer provedor de IA. As notícias geradas podem conter imprecisões.</string>
+    <string name="about_repository">Abrir o repositório no GitHub</string>
+
+    <string name="status_updated">Gerado %1$s · %2$d notícia(s) exibida(s)</string>
+    <string name="status_never_generated">Nada gerado ainda</string>
+
+    <string name="close_and_dismiss">Fechar e remover</string>
+    <string name="close">Fechar</string>
+    <string name="open_in_browser">Abrir no navegador</string>
+    <string name="no_article_text">O modelo não retornou texto para esta notícia.</string>
+
+    <string name="toast_generated">Notícias geradas</string>
+    <string name="toast_restored">Notícias ocultas restauradas</string>
+
+    <string name="error_no_key">Adicione sua chave de API nas configurações</string>
+    <string name="error_no_topic">Defina um tema nas configurações</string>
+    <string name="error_no_base_url">Informe a URL base da API nas configurações</string>
+    <string name="error_no_model">Escolha um modelo nas configurações</string>
+    <string name="error_no_browser">Nenhum aplicativo pode abrir este link</string>
+    <string name="error_empty_result">O modelo não retornou nenhuma notícia</string>
+    <string name="error_generation_failed">Falha na geração: %1$s</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
+    <string name="page_counter">%1$d de %2$d</string>
+
+    <plurals name="stories_to_read">
+        <item quantity="one">%d notícia para ler</item>
+        <item quantity="other">%d notícias para ler</item>
+    </plurals>
+
+    <plurals name="stories">
+        <item quantity="one">%d notícia</item>
+        <item quantity="other">%d notícias</item>
+    </plurals>
+</resources>

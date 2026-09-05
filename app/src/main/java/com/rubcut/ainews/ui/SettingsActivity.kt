@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.color.DynamicColors
@@ -29,6 +30,7 @@ import com.rubcut.ainews.GeminiClient
 import com.rubcut.ainews.NewsUpdater
 import com.rubcut.ainews.R
 import com.rubcut.ainews.SettingsRepository
+import com.rubcut.ainews.StoryLength
 import com.rubcut.ainews.TargetSettings
 import com.rubcut.ainews.targets.NewsTarget
 import kotlinx.coroutines.launch
@@ -55,6 +57,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var intervalValue: TextView
     private lateinit var storiesSlider: Slider
     private lateinit var storiesValue: TextView
+    private lateinit var lengthGroup: MaterialButtonToggleGroup
     private lateinit var status: TextView
     private lateinit var preview: TextView
     private lateinit var progress: LinearProgressIndicator
@@ -83,6 +86,7 @@ class SettingsActivity : AppCompatActivity() {
         intervalValue = findViewById(R.id.intervalValue)
         storiesSlider = findViewById(R.id.storiesSlider)
         storiesValue = findViewById(R.id.storiesValue)
+        lengthGroup = findViewById(R.id.lengthGroup)
         status = findViewById(R.id.statusText)
         preview = findViewById(R.id.previewText)
         progress = findViewById(R.id.progress)
@@ -118,6 +122,8 @@ class SettingsActivity : AppCompatActivity() {
         storiesSlider.value = settings.maxStories.toFloat()
         storiesSlider.addOnChangeListener { _, value, _ -> renderStories(value.roundToInt()) }
         renderStories(settings.maxStories)
+
+        lengthGroup.check(lengthButtonId(settings.storyLength))
 
         findViewById<MaterialButton>(R.id.buttonGetKey).setOnClickListener {
             runCatching {
@@ -189,6 +195,19 @@ class SettingsActivity : AppCompatActivity() {
             ?.takeIf { it.isNotBlank() } ?: Constants.DEFAULT_GEMINI_MODEL
         settings.refreshIntervalMinutes = intervalSlider.value.roundToInt()
         settings.maxStories = storiesSlider.value.roundToInt()
+        settings.storyLength = checkedLength()
+    }
+
+    private fun lengthButtonId(length: StoryLength) = when (length) {
+        StoryLength.SHORT -> R.id.lengthShort
+        StoryLength.MEDIUM -> R.id.lengthMedium
+        StoryLength.LONG -> R.id.lengthLong
+    }
+
+    private fun checkedLength() = when (lengthGroup.checkedButtonId) {
+        R.id.lengthShort -> StoryLength.SHORT
+        R.id.lengthLong -> StoryLength.LONG
+        else -> StoryLength.MEDIUM
     }
 
     /** Verifies the key by listing the models it can reach. */

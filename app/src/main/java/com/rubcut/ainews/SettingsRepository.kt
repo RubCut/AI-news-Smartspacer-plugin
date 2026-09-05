@@ -56,6 +56,11 @@ class TargetSettings(
             ?: java.util.Locale.getDefault().displayLanguage
         set(value) = prefs.edit().putString(key("language"), value.trim()).apply()
 
+    /** How long the generated articles should be. */
+    var storyLength: StoryLength
+        get() = StoryLength.fromId(prefs.getString(key("length"), null))
+        set(value) = prefs.edit().putString(key("length"), value.id).apply()
+
     val isConfigured: Boolean
         get() = apiKey.isNotBlank() && topic.isNotBlank()
 

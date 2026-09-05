@@ -59,21 +59,24 @@ object GeminiClient {
         model: String,
         topic: String,
         count: Int,
-        language: String
+        language: String,
+        length: StoryLength
     ): Result<List<NewsItem>> = withContext(Dispatchers.IO) {
         runCatching {
             val url = URL(String.format(ENDPOINT, model))
             val connection = (url.openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 connectTimeout = 20_000
-                readTimeout = 60_000
+                readTimeout = 120_000
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
                 setRequestProperty("x-goog-api-key", apiKey)
             }
             try {
                 connection.outputStream.use {
-                    it.write(requestBody(topic, count, language).toString().toByteArray())
+                    it.write(
+                        requestBody(topic, count, language, length).toString().toByteArray()
+                    )
                 }
                 val code = connection.responseCode
                 val text = (if (code in 200..299) connection.inputStream else connection.errorStream)
@@ -88,16 +91,28 @@ object GeminiClient {
         }
     }
 
-    private fun requestBody(topic: String, count: Int, language: String) = JSONObject().apply {
+    private fun requestBody(
+        topic: String,
+        count: Int,
+        language: String,
+        length: StoryLength
+    ) = JSONObject().apply {
         val prompt = """
-            You are a news editor. Write $count short, distinct news items about: "$topic".
+            You are a news editor. Write $count distinct news articles about: "$topic".
             Base them on what you know; keep them plausible, factual in tone and self-contained.
             Language of the output: $language.
 
             For every item return:
             - "short": a very short headline for a home screen widget, max ${Constants.SHORT_TITLE_MAX_CHARS} characters, no trailing period.
             - "title": the full headline, max 120 characters.
-            - "body": the story itself, 3-5 sentences.
+            - "body": the article itself — ${length.instruction}.
+
+            Format "body" with GitHub flavoured Markdown and use it generously:
+            **bold** for key facts and names, *italics* for emphasis, `##` and `###`
+            section headings, "- " bulleted lists, "1. " numbered lists, "> " for
+            quotes from people, --- for a separator and [text](https://url) links.
+            Separate paragraphs with a blank line. Do not wrap the whole body in a
+            code block and do not repeat the headline as the first line.
         """.trimIndent()
 
         put("contents", JSONArray().put(JSONObject().apply {
@@ -106,6 +121,7 @@ object GeminiClient {
         }))
         put("generationConfig", JSONObject().apply {
             put("temperature", 0.9)
+            put("maxOutputTokens", length.outputTokens)
             put("responseMimeType", "application/json")
             // Ask for structured output so no fragile text parsing is needed.
             put("responseSchema", JSONObject().apply {

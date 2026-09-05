@@ -29,6 +29,11 @@
     <string name="settings_language_label">Language of the stories</string>
     <string name="settings_interval_label">Update interval</string>
     <string name="settings_stories_label">Stories on the smartspace</string>
+    <string name="settings_length_label">Article length</string>
+    <string name="settings_length_helper">Longer articles use Markdown headings and lists.</string>
+    <string name="length_short">Short</string>
+    <string name="length_medium">Medium</string>
+    <string name="length_long">Long</string>
     <string name="settings_restore">Restore dismissed stories</string>
     <string name="settings_save">Save and generate</string>
     <string name="settings_generating">Generating…</string>

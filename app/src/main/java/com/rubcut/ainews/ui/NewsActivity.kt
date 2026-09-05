@@ -3,6 +3,7 @@ package com.rubcut.ainews.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.DynamicColors
 import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
 import com.kieronquinn.app.smartspacer.sdk.provider.SmartspacerTargetProvider
+import com.rubcut.ainews.MarkdownRenderer
 import com.rubcut.ainews.R
 import com.rubcut.ainews.SettingsRepository
 import com.rubcut.ainews.targets.NewsTarget
@@ -59,8 +61,14 @@ class NewsActivity : AppCompatActivity() {
                 .format(Date(story.timestamp))
         ).joinToString(" · ")
 
-        findViewById<TextView>(R.id.newsBody).text =
-            story.body.ifBlank { getString(R.string.no_article_text) }
+        val bodyView = findViewById<TextView>(R.id.newsBody)
+        if (story.body.isBlank()) {
+            bodyView.text = getString(R.string.no_article_text)
+        } else {
+            // The model writes GitHub flavoured Markdown; render it as spans.
+            bodyView.text = MarkdownRenderer.render(story.body)
+            bodyView.movementMethod = LinkMovementMethod.getInstance()
+        }
 
         val openButton = findViewById<MaterialButton>(R.id.buttonOpen)
         val url = story.url

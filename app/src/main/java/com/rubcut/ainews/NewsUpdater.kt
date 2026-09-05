@@ -21,7 +21,8 @@ object NewsUpdater {
                 model = settings.model,
                 topic = settings.topic,
                 count = settings.maxStories,
-                language = settings.language
+                language = settings.language,
+                length = settings.storyLength
             )
         }
 

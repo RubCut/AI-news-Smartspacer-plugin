@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AI News</string>
+    <string name="target_label">AI News</string>
+    <string name="target_description">Shows the latest AI news headline on your smartspace</string>
+    <string name="tap_to_view_full">Tap to view full</string>
+    <string name="close_and_dismiss">Close &amp; dismiss</string>
+    <string name="close">Close</string>
+    <string name="main_hint">Add the "AI News" target in Smartspacer to see headlines on your home screen.</string>
+    <string name="restore_targets">Restore dismissed targets</string>
+    <string name="add_test_story">Add test story</string>
+</resources>

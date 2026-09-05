@@ -6,9 +6,11 @@ headline and the story itself.
 
 * The target shows the **short headline**.
 * The line underneath (the complication line) always reads **"Tap to view full"**.
-* Tapping opens a dialog with the **full headline**, source, date and article text.
+* Tapping opens a **full screen** article with a large collapsing headline,
+  source, date and the story text.
 * Bottom bar: **Close & dismiss** (left — closes and removes the target from
-  Smartspacer) and **Close** (right — just closes the window). If the feed gave a
+  Smartspacer) and **Close** (right — just closes the window). Dismissing every
+  story hides the target completely until the next generation. If the feed gave a
   link, an "Open in browser" button is shown too.
 
 There is **no launcher app**: everything is configured from inside the target
@@ -18,8 +20,10 @@ There is **no launcher app**: everything is configured from inside the target
 
 * **Topic** — what the model should write about, e.g. "AI and robotics".
 * **AI provider** — Google Gemini (only backend for now).
-* **Model** — `gemini-2.5-flash` / `gemini-2.5-pro` / `gemini-2.0-flash`.
-* **Gemini API key** — with a shortcut to Google AI Studio to create one.
+* **Model** — a starter list, or **Fetch models** to pull the real list of
+  models your key can use.
+* **Gemini API key** — with a shortcut to Google AI Studio, plus **Test key**
+  which verifies it against the API before you generate anything.
 * **Language of the stories** — defaults to the device language.
 * **Update interval** — 15 minutes to 8 hours (`refreshPeriodMinutes`).
 * **Stories on the smartspace** — 1 to 5 targets at a time.

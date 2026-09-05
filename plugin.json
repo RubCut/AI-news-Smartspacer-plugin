@@ -1,8 +1,8 @@
 {
-	"description": "Adds an AI news target: type any topic and a model (Google Gemini) writes the news for you. The target shows a short headline with a \"Tap to view full\" line underneath; tapping opens the full story with two buttons: close & dismiss the target, or just close.",
+	"description": "Adds an AI news target: type any topic and a model writes the news for you. Works with Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen, Ollama and any OpenAI-, Anthropic- or Gemini-compatible endpoint. The target shows a short headline with a \"Tap to view full\" line underneath; tapping opens a full screen reader you can swipe between articles in, with buttons to close & dismiss or just close.",
 	"download_url": "https://github.com/RubCut/AI-news-Smartspacer-plugin/releases/latest/download/app-debug.apk",
 	"version_code": 1,
-	"changelog": "- First release: **AI News target** with short headline + **Tap to view full** line\n- Full article screen with **Close & dismiss** and **Close** buttons\n- Per-target settings: **feed URL**, **update interval** (15 min – 8 h) and **number of stories**",
+	"changelog": "- **Many AI providers**: Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen, Together, Perplexity, Cerebras, Ollama and custom endpoints\n- **Fetch models** and **Test key** buttons\n- **Swipeable reader** with a dots overlay, one target with a \"N stories to read\" summary\n- Articles in **GitHub Markdown** with a choice of length\n- Localised into **Russian, Ukrainian, German, French, Spanish and Portuguese**\n- **About** section with a link to the repository\n- All builds share one signing key, so updates install over each other",
 	"required_package": "com.kieronquinn.app.smartspacer",
 	"minimum_smartspacer_version": 0,
 	"screenshots": []

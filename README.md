@@ -20,7 +20,7 @@ The plugin adds one Target provider to [Smartspacer](https://github.com/KieronQu
 that shows AI-written news:
 
 - 📝 you type a topic — anything from `artificial intelligence` to `Formula 1`;
-- 🤖 Google Gemini writes a short headline, a full headline and the article;
+- 🤖 an AI provider of your choice writes a short headline, a full headline and the article;
 - 📰 the smartspace shows the short headline with a `Tap to view full` line;
 - 📖 tapping opens a full screen reader you can swipe between articles in.
 
@@ -35,6 +35,14 @@ several show a `5 stories to read` summary instead.
   headings, bulleted and numbered lists, quotes, code and links;
 - Article length of your choice — short, medium or long;
 - Model list fetched straight from the API, plus a one-tap API key test;
+- Many AI providers: **Gemini**, **Claude**, **OpenAI**, **DeepSeek**, **OpenRouter**,
+  **Groq**, **Mistral**, **xAI Grok**, **Qwen**, **Together**, **Perplexity**,
+  **Cerebras**, **Ollama** and any custom OpenAI-, Anthropic- or Gemini-compatible endpoint;
+- Keys, models and base URLs are remembered per provider, so switching back and
+  forth loses nothing;
+- An **About** section with the plugin description and a link to the repository;
+- Interface in English, Russian, Ukrainian, German, French, Spanish and Portuguese;
+- Every build is signed with the same key, so updates install over each other;
 - Dynamic colors on Android 12+;
 - Light and dark themes;
 - Per-target settings: each target keeps its own topic, key, model and schedule;
@@ -49,20 +57,41 @@ several show a `5 stories to read` summary instead.
 
 - Android 10 or newer;
 - Smartspacer installed;
-- A Google Gemini API key with access to the
-  [Generative Language API](https://ai.google.dev/gemini-api/docs).
+- An API key for one of the supported providers — or a local server such as
+  [Ollama](https://ollama.com/), which needs no key at all.
 
-> The Gemini API has a free tier with rate limits, and paid tiers above it.
-> Check the current [pricing and quotas](https://ai.google.dev/pricing) before use.
+> Most providers have a free tier with rate limits and paid tiers above it.
+> Check the current pricing and quotas of your provider before use.
+
+### Supported providers
+
+| Provider | API dialect | Key |
+|---|---|---|
+| Google Gemini | Gemini | [AI Studio](https://aistudio.google.com/app/apikey) |
+| Anthropic Claude | Anthropic | [Console](https://console.anthropic.com/settings/keys) |
+| OpenAI | OpenAI | [Platform](https://platform.openai.com/api-keys) |
+| DeepSeek | OpenAI | [Platform](https://platform.deepseek.com/api_keys) |
+| OpenRouter | OpenAI | [Keys](https://openrouter.ai/keys) |
+| Groq | OpenAI | [Console](https://console.groq.com/keys) |
+| Mistral AI | OpenAI | [Console](https://console.mistral.ai/api-keys) |
+| xAI Grok | OpenAI | [Console](https://console.x.ai/) |
+| Alibaba Qwen | OpenAI | [Bailian](https://bailian.console.alibabacloud.com/) |
+| Together AI | OpenAI | [Settings](https://api.together.xyz/settings/api-keys) |
+| Perplexity | OpenAI | [Settings](https://www.perplexity.ai/settings/api) |
+| Cerebras | OpenAI | [Cloud](https://cloud.cerebras.ai/) |
+| Ollama / local server | OpenAI | not needed |
+| Custom endpoint | OpenAI, Anthropic or Gemini | depends on the server |
 
 ## Getting an API key
 
-1. Open [Google AI Studio](https://aistudio.google.com/app/apikey).
-2. Create a project and an API key.
-3. Paste the key into the plugin settings.
+1. Pick a provider in the settings and tap **Get a … key** — it opens that
+   provider's console.
+2. Create a key there.
+3. Paste it into the plugin settings.
 4. Tap **Test key** to verify it, then **Fetch models** to load the models it can use.
 
-A shortcut to AI Studio is also available directly from the settings screen.
+For **Ollama** or a **custom** endpoint, enter the base URL instead
+(for example `http://192.168.1.10:11434/v1`); the key can be left empty.
 
 ## Installation
 
@@ -94,7 +123,8 @@ app/build/outputs/apk/debug/app-debug.apk
 1. In Smartspacer, add the **AI News** target.
 2. The settings open automatically; later they are available through **More settings**.
 3. Enter the **topic** the model should write about and the **language** of the stories.
-4. Paste your **Gemini API key**, then:
+4. Choose the **AI provider**, paste its **API key** (and a **base URL** for local
+   or custom endpoints), then:
    - **Test key** — checks it against the API and reports how many models it can reach;
    - **Fetch models** — loads the real model list for that key into the dropdown.
 5. Choose the behaviour of this target:
@@ -130,7 +160,7 @@ happens in the background receiver, or on demand when you save the settings.
 - the plugin does not track location and collects no analytics;
 - the API key, topic, settings and generated stories are stored locally in
   `SharedPreferences` — per target instance;
-- only the topic, language and length are sent to the Gemini API;
+- only the topic, language and length are sent to the provider you picked;
 - removing a target wipes its settings and its stories.
 
 ## Project structure
@@ -139,9 +169,15 @@ happens in the background receiver, or on demand when you save the settings.
 app/src/main/java/com/rubcut/ainews/
 ├── Constants.kt                # authority, defaults and limits
 ├── NewsItem.kt                 # story model
-├── AiProvider.kt               # AI backends (Gemini for now)
+├── AiProvider.kt               # the list of supported backends
+├── ApiFlavor.kt                # Gemini / Anthropic / OpenAI dialects
+├── AiClient.kt                 # one entry point for every backend
+├── GeminiClient.kt             # Gemini generateContent
+├── AnthropicClient.kt          # Claude /messages
+├── OpenAiClient.kt             # OpenAI-compatible /chat/completions
+├── NewsPrompt.kt               # the shared prompt
+├── NewsJsonParser.kt           # tolerant JSON → stories
 ├── StoryLength.kt              # prompt wording and token budget per length
-├── GeminiClient.kt             # generation and model listing
 ├── MarkdownRenderer.kt         # GitHub flavoured Markdown → spans
 ├── NewsUpdater.kt              # generate and store for one target
 ├── NewsUpdateReceiver.kt       # Smartspacer update requests
@@ -165,9 +201,16 @@ app/src/main/java/com/rubcut/ainews/
 - every refresh costs one API request per target — keep that in mind when
   choosing an interval and a plan.
 
+## Signing
+
+Every build — CI, local, debug and release — is signed with the shared key in
+[`signing/`](signing/README.md), so a new APK always installs over the previous
+one instead of failing with a signature mismatch. Use your own key by creating
+`signing.properties` in the repository root; see the folder's README.
+
 ## Disclaimer
 
-This project is not an official product of Google or Smartspacer. Names and
-trademarks belong to their respective owners. By using the Gemini API you agree
-to the current terms of service and the limits of your plan. Generated stories
-may contain inaccuracies.
+This project is not an official product of Smartspacer or any AI provider. Names
+and trademarks belong to their respective owners. By using a provider's API you
+agree to its current terms of service and the limits of your plan. Generated
+stories may contain inaccuracies.

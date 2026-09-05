@@ -65,6 +65,7 @@ class NewsActivity : AppCompatActivity() {
 
         adapter = StoryPagerAdapter(stories)
         pager.adapter = adapter
+        keepPagesClearOfBottomBar()
         pager.offscreenPageLimit = 1
         pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = renderPageState(position)
@@ -120,6 +121,20 @@ class NewsActivity : AppCompatActivity() {
         val next = position.coerceAtMost(remaining.lastIndex)
         pager.setCurrentItem(next, false)
         renderPageState(next)
+    }
+
+    /**
+     * The bottom bar floats over the pager, so every page gets padding equal to
+     * the bar's height — the article can then be scrolled to the very last line.
+     */
+    private fun keepPagesClearOfBottomBar() {
+        val bottomBar = findViewById<View>(R.id.bottomBar)
+        bottomBar.addOnLayoutChangeListener { _, _, top, _, bottom, _, oldTop, _, oldBottom ->
+            if (bottom - top != oldBottom - oldTop) {
+                adapter.bottomInset = bottom - top
+            }
+        }
+        bottomBar.post { adapter.bottomInset = bottomBar.height }
     }
 
     private fun applyInsets() {

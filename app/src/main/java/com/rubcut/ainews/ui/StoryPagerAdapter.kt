@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import com.rubcut.ainews.MarkdownRenderer
 import com.rubcut.ainews.NewsItem
@@ -16,6 +17,17 @@ import java.util.Date
 class StoryPagerAdapter(
     private var stories: List<NewsItem>
 ) : RecyclerView.Adapter<StoryPagerAdapter.StoryViewHolder>() {
+
+    /**
+     * Free space kept under the text so the last lines can be scrolled clear
+     * of the floating bottom bar instead of hiding behind it.
+     */
+    var bottomInset: Int = 0
+        set(value) {
+            if (field == value) return
+            field = value
+            notifyDataSetChanged()
+        }
 
     fun submit(items: List<NewsItem>) {
         stories = items
@@ -31,7 +43,7 @@ class StoryPagerAdapter(
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
-        holder.bind(stories[position])
+        holder.bind(stories[position], bottomInset)
     }
 
     override fun getItemCount() = stories.size
@@ -42,7 +54,8 @@ class StoryPagerAdapter(
         private val meta: TextView = itemView.findViewById(R.id.storyMeta)
         private val body: TextView = itemView.findViewById(R.id.storyBody)
 
-        fun bind(story: NewsItem) {
+        fun bind(story: NewsItem, bottomInset: Int) {
+            itemView.updatePadding(bottom = bottomInset)
             title.text = story.title
             meta.text = listOfNotNull(
                 story.source.takeIf { it.isNotBlank() },

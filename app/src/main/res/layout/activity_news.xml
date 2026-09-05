@@ -45,15 +45,19 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/dots"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="10dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
             app:tabBackground="@drawable/dot_indicator"
             app:tabIndicatorHeight="0dp"
             app:tabGravity="center"
-            app:tabPaddingStart="5dp"
-            app:tabPaddingEnd="5dp"
+            app:tabMinWidth="0dp"
+            app:tabMaxWidth="28dp"
+            app:tabPaddingStart="3dp"
+            app:tabPaddingEnd="3dp"
+            app:tabPaddingTop="0dp"
+            app:tabPaddingBottom="0dp"
             app:tabRippleColor="@null" />
 
         <TextView

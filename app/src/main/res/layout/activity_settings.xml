@@ -274,7 +274,7 @@
                     <!-- Expressive slider. -->
                     <com.google.android.material.slider.Slider
                         android:id="@+id/intervalSlider"
-                        style="@style/Widget.Material3Expressive.Slider"
+                        style="@style/Widget.Material3Expressive.Slider.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -294,7 +294,7 @@
 
                     <com.google.android.material.slider.Slider
                         android:id="@+id/storiesSlider"
-                        style="@style/Widget.Material3Expressive.Slider"
+                        style="@style/Widget.Material3Expressive.Slider.Medium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>

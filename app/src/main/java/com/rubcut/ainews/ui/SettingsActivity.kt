@@ -106,6 +106,7 @@ class SettingsActivity : AppCompatActivity() {
         testKeyButton = findViewById(R.id.buttonTestKey)
         fetchModelsButton = findViewById(R.id.buttonFetchModels)
         keyStatus = findViewById(R.id.keyStatus)
+        getKeyButton = findViewById(R.id.buttonGetKey)
 
         findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
         applyInsets()
@@ -130,21 +131,21 @@ class SettingsActivity : AppCompatActivity() {
         storiesSlider.valueFrom = 1f
         storiesSlider.valueTo = 5f
         storiesSlider.stepSize = 1f
-        storiesSlider.value = settings.maxStories.toFloat()
+        storiesSlider.value = settings.maxStories.coerceIn(1, 5).toFloat()
         storiesSlider.addOnChangeListener { _, value, _ -> renderStories(value.roundToInt()) }
-        renderStories(settings.maxStories)
+        renderStories(storiesSlider.value.roundToInt())
 
         lengthGroup.check(lengthButtonId(settings.storyLength))
 
-        getKeyButton = findViewById(R.id.buttonGetKey)
+
         getKeyButton.setOnClickListener { openLink(settings.aiProvider.apiKeyUrl) }
         findViewById<MaterialButton>(R.id.buttonRepository).setOnClickListener {
             openLink(PROJECT_URL)
         }
         findViewById<TextView>(R.id.aboutVersion).text =
             getString(R.string.about_version, BuildConfig.VERSION_NAME)
-        findViewById<MaterialButton>(R.id.buttonTestKey).setOnClickListener { testKey() }
-        findViewById<MaterialButton>(R.id.buttonFetchModels).setOnClickListener { fetchModels() }
+        testKeyButton.setOnClickListener { testKey() }
+        fetchModelsButton.setOnClickListener { fetchModels() }
         findViewById<MaterialButton>(R.id.buttonRestore).setOnClickListener {
             settings.clearDismissed()
             notifyTarget()
@@ -156,10 +157,16 @@ class SettingsActivity : AppCompatActivity() {
         render()
     }
 
+    /**
+     * A Slider throws when its value is off the step grid or out of range, so
+     * a stored interval is always snapped back onto it first.
+     */
     private fun normalisedInterval(): Float {
         val minutes = settings.refreshIntervalMinutes
             .coerceIn(Constants.MIN_REFRESH_MINUTES, Constants.MAX_REFRESH_MINUTES)
-        return ((minutes / 15) * 15).coerceAtLeast(Constants.MIN_REFRESH_MINUTES).toFloat()
+        val snapped = (minutes / 15) * 15
+        return snapped.coerceIn(Constants.MIN_REFRESH_MINUTES, Constants.MAX_REFRESH_MINUTES)
+            .toFloat()
     }
 
     private fun renderInterval(minutes: Int) {

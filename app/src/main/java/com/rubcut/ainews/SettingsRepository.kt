@@ -49,11 +49,16 @@ class TargetSettings(
      * backends and back keeps everything that was already typed in.
      */
     var apiKey: String
-        get() = prefs.getString(providerKey("api_key"), "").orEmpty()
+        get() = prefs.getString(providerKey("api_key"), null)
+            // Fall back to the pre-1.1 key, which was not namespaced per provider.
+            ?: prefs.getString(key("api_key"), "").orEmpty()
         set(value) = prefs.edit().putString(providerKey("api_key"), value.trim()).apply()
 
     var model: String
         get() = prefs.getString(providerKey("model"), null)?.takeIf { it.isNotBlank() }
+            ?: prefs.getString(key("model"), null)?.takeIf {
+                it.isNotBlank() && aiProvider == AiProvider.GEMINI
+            }
             ?: aiProvider.defaultModel
         set(value) = prefs.edit().putString(providerKey("model"), value.trim()).apply()
 

@@ -101,8 +101,6 @@ class NewsTarget : SmartspacerTargetProvider() {
     private fun componentName() =
         android.content.ComponentName(provideContext(), NewsTarget::class.java)
 
-    private fun provideContext() = requireNotNull(context) { "No context" }
-
     companion object {
         const val TARGET_PREFIX = "ai_news_"
     }

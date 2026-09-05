@@ -62,6 +62,13 @@
         <item quantity="one">%d hour</item>
         <item quantity="other">%d hours</item>
     </plurals>
+    <string name="page_counter">%1$d of %2$d</string>
+
+    <plurals name="stories_to_read">
+        <item quantity="one">%d story to read</item>
+        <item quantity="other">%d stories to read</item>
+    </plurals>
+
     <plurals name="stories">
         <item quantity="one">%d story</item>
         <item quantity="other">%d stories</item>

@@ -48,24 +48,35 @@ class NewsTarget : SmartspacerTargetProvider() {
             )
         }
 
-        return stories.map { story ->
+        // One target for everything: a single story shows its short headline,
+        // several stories show a "N stories to read" summary instead.
+        val isSingle = stories.size == 1
+        val title = if (isSingle) {
+            stories.first().shortTitle
+        } else {
+            context.resources.getQuantityString(
+                R.plurals.stories_to_read, stories.size, stories.size
+            )
+        }
+
+        return listOf(
             TargetTemplate.Basic(
-                id = "${TARGET_PREFIX}${story.id}_$smartspacerId",
+                id = "${TARGET_PREFIX}${stories.first().id}_${stories.size}_$smartspacerId",
                 componentName = componentName(),
-                // Short headline on the target itself…
-                title = Text(story.shortTitle),
-                // …and the complication line below it.
+                title = Text(title),
+                // The complication line below the headline.
                 subtitle = Text(context.getString(R.string.tap_to_view_full)),
                 icon = Icon(icon(), shouldTint = true),
                 onClick = TapAction(
                     intent = Intent(context, NewsActivity::class.java).apply {
-                        putExtra(NewsActivity.EXTRA_NEWS_ID, story.id)
+                        // Open on the newest story; the rest are one swipe away.
+                        putExtra(NewsActivity.EXTRA_NEWS_ID, stories.first().id)
                         putExtra(SmartspacerConstants.EXTRA_SMARTSPACER_ID, smartspacerId)
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     }
                 )
             ).create().apply { canBeDismissed = true }
-        }
+        )
     }
 
     override fun getConfig(smartspacerId: String?): Config {
@@ -85,8 +96,10 @@ class NewsTarget : SmartspacerTargetProvider() {
     }
 
     override fun onDismiss(smartspacerId: String, targetId: String): Boolean {
-        val newsId = targetId.removePrefix(TARGET_PREFIX).removeSuffix("_$smartspacerId")
-        SettingsRepository(provideContext()).forTarget(smartspacerId).dismiss(newsId)
+        // The target represents every visible story, so swiping it away hides
+        // all of them until the next generation.
+        val settings = SettingsRepository(provideContext()).forTarget(smartspacerId)
+        settings.getVisibleStories().forEach { settings.dismiss(it.id) }
         notifyChange(smartspacerId)
         return true
     }

@@ -42,4 +42,5 @@ dependencies {
     implementation("com.google.android.material:material:1.14.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
 }

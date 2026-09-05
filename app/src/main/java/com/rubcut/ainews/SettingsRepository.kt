@@ -145,6 +145,14 @@ class TargetSettings(
         prefs.edit().putStringSet(key("dismissed"), updated.toList().takeLast(200).toSet()).apply()
     }
 
+    /** True when stories exist but the user dismissed every single one. */
+    fun hasDismissedEverything(): Boolean {
+        val stories = getStories()
+        if (stories.isEmpty()) return false
+        val dismissed = dismissedIds()
+        return stories.all { dismissed.contains(it.id) }
+    }
+
     fun clearDismissed() {
         prefs.edit().remove(key("dismissed")).apply()
     }

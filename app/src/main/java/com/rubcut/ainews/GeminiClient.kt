@@ -16,8 +16,43 @@ import java.net.URL
  */
 object GeminiClient {
 
-    private const val ENDPOINT =
-        "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent"
+    private const val BASE = "https://generativelanguage.googleapis.com/v1beta"
+    private const val ENDPOINT = "$BASE/models/%s:generateContent"
+    private const val MODELS_ENDPOINT = "$BASE/models?pageSize=200"
+
+    /**
+     * Asks the API which models this key may use, keeping only those that can
+     * actually generate content. Doubles as an API key test.
+     */
+    suspend fun listModels(apiKey: String): Result<List<String>> = withContext(Dispatchers.IO) {
+        runCatching {
+            val connection = (URL(MODELS_ENDPOINT).openConnection() as HttpURLConnection).apply {
+                requestMethod = "GET"
+                connectTimeout = 15_000
+                readTimeout = 30_000
+                setRequestProperty("x-goog-api-key", apiKey)
+            }
+            try {
+                val code = connection.responseCode
+                val text = (if (code in 200..299) connection.inputStream else connection.errorStream)
+                    ?.bufferedReader()?.use(BufferedReader::readText).orEmpty()
+                if (code !in 200..299) error(extractApiError(text) ?: "HTTP $code")
+
+                val models = JSONObject(text).optJSONArray("models") ?: JSONArray()
+                (0 until models.length()).mapNotNull { i ->
+                    val model = models.getJSONObject(i)
+                    val methods = model.optJSONArray("supportedGenerationMethods")
+                    val supportsGenerate = (0 until (methods?.length() ?: 0))
+                        .any { methods!!.getString(it) == "generateContent" }
+                    // Names come back as "models/gemini-2.5-flash".
+                    model.optString("name").removePrefix("models/")
+                        .takeIf { supportsGenerate && it.isNotBlank() }
+                }.sorted()
+            } finally {
+                connection.disconnect()
+            }
+        }
+    }
 
     suspend fun generate(
         apiKey: String,

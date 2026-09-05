@@ -5,7 +5,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.DynamicColors
 import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
@@ -17,10 +23,9 @@ import java.text.DateFormat
 import java.util.Date
 
 /**
- * Full article view opened by tapping the target.
- *
- * Bottom bar: "Close & dismiss" on the left removes the target from Smartspacer,
- * "Close" simply closes this window.
+ * Full screen article opened by tapping the target: a large flexible app bar
+ * with the full headline, the story below and a bottom bar with
+ * "Close & dismiss" (left, removes the target) and "Close" (right).
  */
 class NewsActivity : AppCompatActivity() {
 
@@ -29,6 +34,7 @@ class NewsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DynamicColors.applyToActivityIfAvailable(this)
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
@@ -42,15 +48,19 @@ class NewsActivity : AppCompatActivity() {
             return
         }
 
-        findViewById<TextView>(R.id.newsTitle).text = story.title
+        applyInsets()
+
+        findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
+        findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar).title = story.title
+
         findViewById<TextView>(R.id.newsMeta).text = listOfNotNull(
             story.source.takeIf { it.isNotBlank() },
             DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
                 .format(Date(story.timestamp))
         ).joinToString(" · ")
 
-        val body = findViewById<TextView>(R.id.newsBody)
-        body.text = story.body.ifBlank { getString(R.string.no_article_text) }
+        findViewById<TextView>(R.id.newsBody).text =
+            story.body.ifBlank { getString(R.string.no_article_text) }
 
         val openButton = findViewById<MaterialButton>(R.id.buttonOpen)
         val url = story.url
@@ -68,24 +78,44 @@ class NewsActivity : AppCompatActivity() {
             }
         }
 
-        // Left button: close and remove the target from the smartspace.
+        // Left: close and remove the target from the smartspace.
         findViewById<MaterialButton>(R.id.buttonDismiss).setOnClickListener {
             val id = newsId
             val targetId = smartspacerId
             if (settings != null && id != null && targetId != null) {
                 settings.dismiss(id)
-                SmartspacerTargetProvider.notifyChange(
-                    this, NewsTarget::class.java, targetId
-                )
+                SmartspacerTargetProvider.notifyChange(this, NewsTarget::class.java, targetId)
             }
             finish()
         }
 
-        // Right button: just close.
+        // Right: just close.
         findViewById<MaterialButton>(R.id.buttonClose).setOnClickListener { finish() }
     }
 
+    private fun applyInsets() {
+        val appBar = findViewById<View>(R.id.appBar)
+        val content = findViewById<View>(R.id.contentScroll)
+        val buttonBar = findViewById<View>(R.id.buttonBar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.root)) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            appBar.updatePadding(top = bars.top, left = bars.left, right = bars.right)
+            content.updatePadding(left = bars.left, right = bars.right)
+            buttonBar.updatePadding(
+                left = bars.left + BAR_PADDING_DP.dp(),
+                right = bars.right + BAR_PADDING_DP.dp(),
+                bottom = bars.bottom + BAR_PADDING_DP.dp()
+            )
+            insets
+        }
+    }
+
+    private fun Int.dp() = (this * resources.displayMetrics.density).toInt()
+
     companion object {
         const val EXTRA_NEWS_ID = "news_id"
+        private const val BAR_PADDING_DP = 16
     }
 }

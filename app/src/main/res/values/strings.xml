@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AI News</string>
+    <string name="app_name">AI News plugin</string>
     <string name="settings_activity_label">AI News settings</string>
 
     <string name="target_label">AI News</string>
@@ -16,6 +16,16 @@
     <string name="settings_model_label">Model</string>
     <string name="settings_key_label">Gemini API key</string>
     <string name="settings_get_key">Get an API key</string>
+    <string name="settings_test_key">Test key</string>
+    <string name="settings_fetch_models">Fetch models</string>
+    <string name="settings_testing">Testing key…</string>
+    <string name="settings_fetching_models">Fetching models…</string>
+    <string name="settings_section_topic">What to write about</string>
+    <string name="settings_section_model">AI backend</string>
+    <string name="key_ok">Key works · %1$d models available</string>
+    <string name="key_failed">Key check failed: %1$s</string>
+    <string name="models_loaded">Loaded %1$d models</string>
+    <string name="models_empty">This key has no usable models</string>
     <string name="settings_language_label">Language of the stories</string>
     <string name="settings_interval_label">Update interval</string>
     <string name="settings_stories_label">Stories on the smartspace</string>

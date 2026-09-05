@@ -24,7 +24,7 @@
             android:exported="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AiNews.Dialog" />
+            android:theme="@style/Theme.AiNews.News" />
 
         <provider
             android:name=".targets.NewsTarget"

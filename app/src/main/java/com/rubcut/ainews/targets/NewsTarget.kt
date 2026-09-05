@@ -27,8 +27,13 @@ class NewsTarget : SmartspacerTargetProvider() {
         val stories = settings.getVisibleStories()
 
         if (stories.isEmpty()) {
-            // Nothing to show yet: point the user at the settings instead of
-            // silently hiding the target.
+            // Everything was dismissed: hide the target completely until the
+            // next generation brings new stories.
+            if (settings.isConfigured && settings.hasDismissedEverything()) {
+                return emptyList()
+            }
+            // Not set up yet (or the last generation failed): point the user at
+            // the settings instead of silently disappearing.
             val subtitle = settings.lastError
                 ?: context.getString(R.string.target_empty_subtitle)
             return listOf(

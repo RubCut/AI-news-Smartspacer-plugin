@@ -5,14 +5,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
@@ -20,6 +25,7 @@ import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
 import com.kieronquinn.app.smartspacer.sdk.provider.SmartspacerTargetProvider
 import com.rubcut.ainews.AiProvider
 import com.rubcut.ainews.Constants
+import com.rubcut.ainews.GeminiClient
 import com.rubcut.ainews.NewsUpdater
 import com.rubcut.ainews.R
 import com.rubcut.ainews.SettingsRepository
@@ -51,11 +57,16 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var storiesValue: TextView
     private lateinit var status: TextView
     private lateinit var preview: TextView
-    private lateinit var progress: CircularProgressIndicator
+    private lateinit var progress: LinearProgressIndicator
     private lateinit var saveButton: MaterialButton
+    private lateinit var testKeyButton: MaterialButton
+    private lateinit var fetchModelsButton: MaterialButton
+    private lateinit var keyStatus: TextView
+    private var availableModels: List<String> = Constants.GEMINI_MODELS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DynamicColors.applyToActivityIfAvailable(this)
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
@@ -76,6 +87,12 @@ class SettingsActivity : AppCompatActivity() {
         preview = findViewById(R.id.previewText)
         progress = findViewById(R.id.progress)
         saveButton = findViewById(R.id.buttonSave)
+        testKeyButton = findViewById(R.id.buttonTestKey)
+        fetchModelsButton = findViewById(R.id.buttonFetchModels)
+        keyStatus = findViewById(R.id.keyStatus)
+
+        findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
+        applyInsets()
 
         topicField.setText(settings.topic)
         apiKeyField.setText(settings.apiKey)
@@ -85,7 +102,7 @@ class SettingsActivity : AppCompatActivity() {
         providerField.setSimpleItems(AiProvider.entries.map { it.label }.toTypedArray())
         providerField.setText(settings.aiProvider.label, false)
 
-        modelField.setSimpleItems(Constants.GEMINI_MODELS.toTypedArray())
+        modelField.setSimpleItems(availableModels.toTypedArray())
         modelField.setText(settings.model, false)
 
         intervalSlider.valueFrom = Constants.MIN_REFRESH_MINUTES.toFloat()
@@ -107,6 +124,8 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(API_KEY_URL)))
             }
         }
+        findViewById<MaterialButton>(R.id.buttonTestKey).setOnClickListener { testKey() }
+        findViewById<MaterialButton>(R.id.buttonFetchModels).setOnClickListener { fetchModels() }
         findViewById<MaterialButton>(R.id.buttonRestore).setOnClickListener {
             settings.clearDismissed()
             notifyTarget()
@@ -172,6 +191,76 @@ class SettingsActivity : AppCompatActivity() {
         settings.maxStories = storiesSlider.value.roundToInt()
     }
 
+    /** Verifies the key by listing the models it can reach. */
+    private fun testKey() {
+        persistFields()
+        val key = settings.apiKey
+        if (key.isBlank()) {
+            snack(getString(R.string.error_no_key))
+            return
+        }
+        setLoading(true, R.string.settings_testing)
+        lifecycleScope.launch {
+            val result = GeminiClient.listModels(key)
+            setLoading(false)
+            result.fold(
+                onSuccess = { models ->
+                    keyStatus.visibility = View.VISIBLE
+                    keyStatus.text = getString(R.string.key_ok, models.size)
+                    keyStatus.setTextColor(
+                        MaterialColors.getColor(keyStatus, com.google.android.material.R.attr.colorPrimary)
+                    )
+                    snack(getString(R.string.key_ok, models.size))
+                },
+                onFailure = { error ->
+                    keyStatus.visibility = View.VISIBLE
+                    keyStatus.text = getString(R.string.key_failed, error.message ?: "unknown")
+                    keyStatus.setTextColor(
+                        MaterialColors.getColor(keyStatus, com.google.android.material.R.attr.colorError)
+                    )
+                    snack(getString(R.string.key_failed, error.message ?: "unknown"))
+                }
+            )
+        }
+    }
+
+    /** Pulls the real model list for this key into the dropdown. */
+    private fun fetchModels() {
+        persistFields()
+        val key = settings.apiKey
+        if (key.isBlank()) {
+            snack(getString(R.string.error_no_key))
+            return
+        }
+        setLoading(true, R.string.settings_fetching_models)
+        lifecycleScope.launch {
+            val result = GeminiClient.listModels(key)
+            setLoading(false)
+            result.fold(
+                onSuccess = { models ->
+                    if (models.isEmpty()) {
+                        snack(getString(R.string.models_empty))
+                        return@fold
+                    }
+                    // Gemini text models first — that is what this plugin needs.
+                    val sorted = models.sortedBy { !it.startsWith("gemini") }
+                    availableModels = sorted
+                    modelField.setSimpleItems(sorted.toTypedArray())
+                    val current = modelField.text?.toString()
+                    if (current.isNullOrBlank() || !sorted.contains(current)) {
+                        val preferred = sorted.firstOrNull { it.contains("flash") } ?: sorted.first()
+                        modelField.setText(preferred, false)
+                        settings.model = preferred
+                    }
+                    snack(getString(R.string.models_loaded, sorted.size))
+                },
+                onFailure = { error ->
+                    snack(getString(R.string.key_failed, error.message ?: "unknown"))
+                }
+            )
+        }
+    }
+
     private fun save() {
         persistFields()
         if (!settings.isConfigured) {
@@ -196,17 +285,23 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLoading(loading: Boolean) {
+    private fun setLoading(loading: Boolean, labelRes: Int = R.string.settings_generating) {
         progress.visibility = if (loading) View.VISIBLE else View.GONE
         saveButton.isEnabled = !loading
-        saveButton.setText(if (loading) R.string.settings_generating else R.string.settings_save)
+        testKeyButton.isEnabled = !loading
+        fetchModelsButton.isEnabled = !loading
+        saveButton.setText(if (loading) labelRes else R.string.settings_save)
+    }
+
+    private fun snack(text: String) {
+        Snackbar.make(findViewById(R.id.root), text, Snackbar.LENGTH_LONG).show()
     }
 
     private fun notifyTarget() {
         SmartspacerTargetProvider.notifyChange(this, NewsTarget::class.java, smartspacerId)
     }
 
-    private fun toast(text: String) = Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    private fun toast(text: String) = snack(text)
 
     override fun onPause() {
         super.onPause()
@@ -214,6 +309,23 @@ class SettingsActivity : AppCompatActivity() {
         if (isFinishing) {
             persistFields()
             notifyTarget()
+        }
+    }
+
+    private fun applyInsets() {
+        val appBar = findViewById<View>(R.id.appBar)
+        val content = findViewById<View>(R.id.contentScroll)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.root)) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            appBar.updatePadding(top = bars.top, left = bars.left, right = bars.right)
+            content.updatePadding(
+                left = bars.left,
+                right = bars.right,
+                bottom = bars.bottom + (24 * resources.displayMetrics.density).toInt()
+            )
+            insets
         }
     }
 

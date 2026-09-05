@@ -34,17 +34,8 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <!-- The article opens as a dialog on top of the launcher. -->
-    <style name="Theme.AiNews.Dialog" parent="Theme.Material3.DayNight.Dialog">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorOnPrimary">@color/on_primary</item>
-        <item name="colorSecondaryContainer">@color/secondary_container</item>
-        <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
-        <item name="colorSurface">@color/surface_container_high</item>
-        <item name="colorOnSurface">@color/on_surface</item>
-        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
-        <item name="android:windowMinWidthMajor">92%</item>
-        <item name="android:windowMinWidthMinor">96%</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
+    <!-- The article is a full screen activity. -->
+    <style name="Theme.AiNews.News" parent="Theme.AiNews">
+        <item name="android:windowBackground">@color/surface</item>
     </style>
 </resources>

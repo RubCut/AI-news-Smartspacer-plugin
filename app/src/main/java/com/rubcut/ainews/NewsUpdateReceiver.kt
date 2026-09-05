@@ -25,10 +25,12 @@ class NewsUpdateReceiver : SmartspacerTargetUpdateReceiver() {
                 coroutineScope {
                     requestTargets.distinctBy { it.smartspacerId }.map { request ->
                         async {
-                            NewsUpdater.refresh(
-                                context,
-                                repository.forTarget(request.smartspacerId)
-                            )
+                            val settings = repository.forTarget(request.smartspacerId)
+                            if (settings.isConfigured) {
+                                NewsUpdater.refresh(context, settings)
+                            } else {
+                                false
+                            }
                         }
                     }.awaitAll()
                 }

@@ -1,6 +1,8 @@
 # AI News — Smartspacer plugin
 
-Smartspacer plugin that publishes a **news target** on your smartspace.
+Smartspacer plugin that publishes an **AI-written news target** on your smartspace:
+you type a topic, and a model (Gemini for now) writes a short headline, a full
+headline and the story itself.
 
 * The target shows the **short headline**.
 * The line underneath (the complication line) always reads **"Tap to view full"**.
@@ -14,13 +16,17 @@ There is **no launcher app**: everything is configured from inside the target
 
 ## Settings (per target instance)
 
-* **RSS / Atom feed** — any feed; the default is a Google News AI search feed.
+* **Topic** — what the model should write about, e.g. "AI and robotics".
+* **AI provider** — Google Gemini (only backend for now).
+* **Model** — `gemini-2.5-flash` / `gemini-2.5-pro` / `gemini-2.0-flash`.
+* **Gemini API key** — with a shortcut to Google AI Studio to create one.
+* **Language of the stories** — defaults to the device language.
 * **Update interval** — 15 minutes to 8 hours (`refreshPeriodMinutes`).
 * **Stories on the smartspace** — 1 to 5 targets at a time.
 * **Restore dismissed stories** — brings back stories removed with dismiss.
 
-Several "AI News" targets can be added at once; each keeps its own feed,
-interval and dismissed list, and its settings are wiped on `onProviderRemoved`.
+Several "AI News" targets can be added at once (each with its own topic); each keeps its own feed,
+topic, key, model, interval and dismissed list, and its settings are wiped on `onProviderRemoved`.
 
 ## Project layout
 
@@ -28,8 +34,9 @@ interval and dismissed list, and its settings are wiped on `onProviderRemoved`.
 app/src/main/java/com/rubcut/ainews/
 ├── Constants.kt              # authority, defaults, limits
 ├── NewsItem.kt               # story model
-├── NewsFetcher.kt            # tiny RSS/Atom parser (no networking libs)
-├── NewsUpdater.kt            # fetch + store for one target instance
+├── AiProvider.kt             # AI backends (Gemini for now)
+├── GeminiClient.kt           # Gemini REST call with a JSON response schema
+├── NewsUpdater.kt            # generate + store for one target instance
 ├── NewsUpdateReceiver.kt     # periodic refresh broadcast from Smartspacer
 ├── SettingsRepository.kt     # per-smartspacerId settings + cached stories
 ├── targets/NewsTarget.kt     # SmartspacerTargetProvider

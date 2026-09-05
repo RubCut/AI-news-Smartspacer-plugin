@@ -32,9 +32,32 @@ class TargetSettings(
 
     private fun key(name: String) = "$smartspacerId.$name"
 
-    var feedUrl: String
-        get() = prefs.getString(key("feed"), Constants.DEFAULT_FEED) ?: Constants.DEFAULT_FEED
-        set(value) = prefs.edit().putString(key("feed"), value.trim()).apply()
+    /** What the model should write about, e.g. "AI and robotics". */
+    var topic: String
+        get() = prefs.getString(key("topic"), Constants.DEFAULT_TOPIC) ?: Constants.DEFAULT_TOPIC
+        set(value) = prefs.edit().putString(key("topic"), value.trim()).apply()
+
+    var aiProvider: AiProvider
+        get() = AiProvider.fromId(prefs.getString(key("provider"), null))
+        set(value) = prefs.edit().putString(key("provider"), value.id).apply()
+
+    var apiKey: String
+        get() = prefs.getString(key("api_key"), "").orEmpty()
+        set(value) = prefs.edit().putString(key("api_key"), value.trim()).apply()
+
+    var model: String
+        get() = prefs.getString(key("model"), Constants.DEFAULT_GEMINI_MODEL)
+            ?: Constants.DEFAULT_GEMINI_MODEL
+        set(value) = prefs.edit().putString(key("model"), value).apply()
+
+    /** Language the stories are written in; defaults to the device language. */
+    var language: String
+        get() = prefs.getString(key("language"), null)
+            ?: java.util.Locale.getDefault().displayLanguage
+        set(value) = prefs.edit().putString(key("language"), value.trim()).apply()
+
+    val isConfigured: Boolean
+        get() = apiKey.isNotBlank() && topic.isNotBlank()
 
     var refreshIntervalMinutes: Int
         get() = prefs.getInt(key("interval"), Constants.DEFAULT_REFRESH_PERIOD_MINUTES)

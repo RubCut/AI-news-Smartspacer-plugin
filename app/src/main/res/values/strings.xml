@@ -3,34 +3,41 @@
     <string name="settings_activity_label">AI News settings</string>
 
     <string name="target_label">AI News</string>
-    <string name="target_description">Shows the latest news headline on your smartspace, tap to read the full story</string>
+    <string name="target_description">Pick a topic and an AI model writes the news for your smartspace</string>
     <string name="tap_to_view_full">Tap to view full</string>
     <string name="target_empty_title">AI News</string>
-    <string name="target_empty_subtitle">Tap to set up your feed</string>
+    <string name="target_empty_subtitle">Tap to set up your topic</string>
 
     <string name="settings_title">AI News</string>
-    <string name="settings_feed_label">RSS / Atom feed</string>
-    <string name="settings_feed_hint">https://example.com/rss</string>
-    <string name="settings_use_default">Use default AI feed</string>
+    <string name="settings_subtitle">Write a topic and the model will generate a short headline, a full headline and the story itself.</string>
+    <string name="settings_topic_label">Topic</string>
+    <string name="settings_topic_helper">For example: AI and robotics, Formula 1, space exploration</string>
+    <string name="settings_provider_label">AI provider</string>
+    <string name="settings_model_label">Model</string>
+    <string name="settings_key_label">Gemini API key</string>
+    <string name="settings_get_key">Get an API key</string>
+    <string name="settings_language_label">Language of the stories</string>
     <string name="settings_interval_label">Update interval</string>
     <string name="settings_stories_label">Stories on the smartspace</string>
     <string name="settings_restore">Restore dismissed stories</string>
-    <string name="settings_save">Save and refresh</string>
+    <string name="settings_save">Save and generate</string>
+    <string name="settings_generating">Generating…</string>
 
-    <string name="status_updated">Updated %1$s · %2$d story(s) shown</string>
-    <string name="status_never_updated">Not updated yet</string>
+    <string name="status_updated">Generated %1$s · %2$d story(s) shown</string>
+    <string name="status_never_generated">Nothing generated yet</string>
 
     <string name="close_and_dismiss">Close &amp; dismiss</string>
     <string name="close">Close</string>
     <string name="open_in_browser">Open in browser</string>
-    <string name="no_article_text">No article text was provided by the feed. Open it in the browser to read more.</string>
+    <string name="no_article_text">The model returned no text for this story.</string>
 
-    <string name="toast_saved">Saved</string>
+    <string name="toast_generated">Stories generated</string>
     <string name="toast_restored">Dismissed stories restored</string>
 
-    <string name="error_no_feed">No feed URL set — open the settings</string>
-    <string name="error_empty_feed">Feed has no stories</string>
-    <string name="error_fetch_failed">Update failed: %1$s</string>
+    <string name="error_no_key">Add your Gemini API key in the settings</string>
+    <string name="error_no_topic">Set a topic in the settings</string>
+    <string name="error_empty_result">The model returned no stories</string>
+    <string name="error_generation_failed">Generation failed: %1$s</string>
 
     <plurals name="minutes">
         <item quantity="one">%d minute</item>

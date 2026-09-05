@@ -2,34 +2,47 @@ package com.rubcut.ainews
 
 import android.content.Context
 
-/** Fetches the configured feed and stores the result for one target instance. */
+/** Asks the AI backend for fresh stories and stores them for one target. */
 object NewsUpdater {
 
     suspend fun refresh(context: Context, settings: TargetSettings): Boolean {
-        val feed = settings.feedUrl
-        if (feed.isBlank()) {
-            settings.setError(context.getString(R.string.error_no_feed))
+        if (settings.apiKey.isBlank()) {
+            settings.setError(context.getString(R.string.error_no_key))
             return false
         }
-        val result = NewsFetcher.fetch(feed)
+        if (settings.topic.isBlank()) {
+            settings.setError(context.getString(R.string.error_no_topic))
+            return false
+        }
+
+        val result = when (settings.aiProvider) {
+            AiProvider.GEMINI -> GeminiClient.generate(
+                apiKey = settings.apiKey,
+                model = settings.model,
+                topic = settings.topic,
+                count = settings.maxStories,
+                language = settings.language
+            )
+        }
+
         val items = result.getOrNull()
         return when {
             items == null -> {
                 settings.setError(
                     context.getString(
-                        R.string.error_fetch_failed,
+                        R.string.error_generation_failed,
                         result.exceptionOrNull()?.message ?: "unknown"
                     )
                 )
                 false
             }
             items.isEmpty() -> {
-                settings.setError(context.getString(R.string.error_empty_feed))
+                settings.setError(context.getString(R.string.error_empty_result))
                 false
             }
             else -> {
-                // Keep dismissed stories dismissed by simply storing everything;
-                // the target filters them out when rendering.
+                // Generated stories replace the old ones; dismissals only apply
+                // to the ids that are still around.
                 settings.setStories(items)
                 true
             }

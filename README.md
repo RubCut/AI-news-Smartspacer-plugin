@@ -4,15 +4,21 @@ Smartspacer plugin that publishes an **AI-written news target** on your smartspa
 you type a topic, and a model (Gemini for now) writes a short headline, a full
 headline and the story itself.
 
-* The target shows the **short headline**.
+* **One target** for everything: a single story shows its **short headline**,
+  several show a **"N stories to read"** summary instead.
 * The line underneath (the complication line) always reads **"Tap to view full"**.
-* Tapping opens a **full screen** article with a large collapsing headline,
+* Tapping opens a **full screen reader**; every unread story is a page, so you
+  swipe left/right between articles, with a **dots overlay** (and an "x of y"
+  counter) sitting just above the buttons. Tapping a dot jumps to that story.
+* Each page shows the full headline,
   source, date and the story text. The body is written in **GitHub flavoured
   Markdown** (bold, italics, strikethrough, headings, bullet and numbered lists,
   quotes, inline code, code blocks, rules and links) and rendered as styled text.
 * Bottom bar: **Close & dismiss** (left — closes and removes the target from
-  Smartspacer) and **Close** (right — just closes the window). Dismissing every
-  story hides the target completely until the next generation. If the feed gave a
+  Smartspacer) and **Close** (right — just closes the reader). "Close & dismiss"
+  drops just the story you are reading and moves to the next one; once the last
+  one is gone (or the target is swiped away on the smartspace) the target
+  disappears until the next generation. If the feed gave a
   link, an "Open in browser" button is shown too.
 
 There is **no launcher app**: everything is configured from inside the target
@@ -50,7 +56,8 @@ app/src/main/java/com/rubcut/ainews/
 ├── NewsUpdateReceiver.kt     # periodic refresh broadcast from Smartspacer
 ├── SettingsRepository.kt     # per-smartspacerId settings + cached stories
 ├── targets/NewsTarget.kt     # SmartspacerTargetProvider
-└── ui/NewsActivity.kt        # article dialog with the two buttons
+└── ui/NewsActivity.kt        # swipeable reader with dots and the two buttons
+    ui/StoryPagerAdapter.kt   # one page per story
     ui/SettingsActivity.kt    # target settings (configActivity)
 ```
 

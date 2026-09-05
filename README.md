@@ -95,12 +95,10 @@ For **Ollama** or a **custom** endpoint, enter the base URL instead
 
 ## Installation
 
-### Prebuilt debug build
+### Prebuilt build
 
-1. Open the latest successful run in
-   [Actions](https://github.com/RubCut/AI-news-Smartspacer-plugin/actions/workflows/build.yml).
-2. Download the `ai-news-debug-apk` artifact.
-3. Unpack the archive and install the APK on your phone.
+1. Open releases.
+2. Install/Update plugin
 
 ### Building from sources
 

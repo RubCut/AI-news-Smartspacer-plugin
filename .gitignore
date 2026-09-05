@@ -9,3 +9,6 @@ captures/
 .cxx
 *.apk
 *.keystore
+# The shared signing key in signing/ is intentionally committed; a fork's own
+# credentials belong in signing.properties, which is not.
+signing.properties

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -12,7 +14,7 @@ plugins {
  * (AI_NEWS_KEYSTORE / AI_NEWS_KEYSTORE_PASSWORD / AI_NEWS_KEY_ALIAS /
  * AI_NEWS_KEY_PASSWORD) without touching this file.
  */
-val signingProperties = java.util.Properties().apply {
+val signingProperties = Properties().apply {
     val file = rootProject.file("signing.properties")
     if (file.exists()) file.inputStream().use { load(it) }
 }

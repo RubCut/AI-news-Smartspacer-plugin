@@ -35,7 +35,7 @@
     </style>
 
     <!-- The article opens as a dialog on top of the launcher. -->
-    <style name="Theme.AiNews.Dialog" parent="Theme.Material3Expressive.DayNight.Dialog">
+    <style name="Theme.AiNews.Dialog" parent="Theme.Material3.DayNight.Dialog">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
         <item name="colorSecondaryContainer">@color/secondary_container</item>

@@ -1,120 +1,52 @@
 package com.rubcut.ainews
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.net.HttpURLConnection
-import java.net.URL
 
-/**
- * Thin Gemini REST client: asks the model for news on a topic and gets back
- * a JSON array of stories (short headline, full headline, body).
- *
- * No SDK is used on purpose — one HTTPS call keeps the plugin tiny.
- */
-object GeminiClient {
+/** Google Gemini `generateContent` dialect. */
+internal object GeminiClient {
 
-    private const val BASE = "https://generativelanguage.googleapis.com/v1beta"
-    private const val ENDPOINT = "$BASE/models/%s:generateContent"
-    private const val MODELS_ENDPOINT = "$BASE/models?pageSize=200"
-
-    /**
-     * Asks the API which models this key may use, keeping only those that can
-     * actually generate content. Doubles as an API key test.
-     */
-    suspend fun listModels(apiKey: String): Result<List<String>> = withContext(Dispatchers.IO) {
-        runCatching {
-            val connection = (URL(MODELS_ENDPOINT).openConnection() as HttpURLConnection).apply {
-                requestMethod = "GET"
-                connectTimeout = 15_000
-                readTimeout = 30_000
-                setRequestProperty("x-goog-api-key", apiKey)
-            }
-            try {
-                val code = connection.responseCode
-                val text = (if (code in 200..299) connection.inputStream else connection.errorStream)
-                    ?.bufferedReader()?.use(BufferedReader::readText).orEmpty()
-                if (code !in 200..299) error(extractApiError(text) ?: "HTTP $code")
-
-                val models = JSONObject(text).optJSONArray("models") ?: JSONArray()
-                (0 until models.length()).mapNotNull { i ->
-                    val model = models.getJSONObject(i)
-                    val methods = model.optJSONArray("supportedGenerationMethods")
-                    val supportsGenerate = (0 until (methods?.length() ?: 0))
-                        .any { methods!!.getString(it) == "generateContent" }
-                    // Names come back as "models/gemini-2.5-flash".
-                    model.optString("name").removePrefix("models/")
-                        .takeIf { supportsGenerate && it.isNotBlank() }
-                }.sorted()
-            } finally {
-                connection.disconnect()
-            }
-        }
+    fun generate(
+        config: AiClient.Config,
+        prompt: String,
+        length: StoryLength,
+        source: String
+    ): List<NewsItem> {
+        val url = Http.join(config.baseUrl, "models/${config.model}:generateContent")
+        val response = Http.request(
+            url = url,
+            method = "POST",
+            headers = headers(config),
+            body = body(prompt, length).toString()
+        )
+        return NewsJsonParser.parse(extractText(response), source)
     }
 
-    suspend fun generate(
-        apiKey: String,
-        model: String,
-        topic: String,
-        count: Int,
-        language: String,
-        length: StoryLength
-    ): Result<List<NewsItem>> = withContext(Dispatchers.IO) {
-        runCatching {
-            val url = URL(String.format(ENDPOINT, model))
-            val connection = (url.openConnection() as HttpURLConnection).apply {
-                requestMethod = "POST"
-                connectTimeout = 20_000
-                readTimeout = 120_000
-                doOutput = true
-                setRequestProperty("Content-Type", "application/json")
-                setRequestProperty("x-goog-api-key", apiKey)
-            }
-            try {
-                connection.outputStream.use {
-                    it.write(
-                        requestBody(topic, count, language, length).toString().toByteArray()
-                    )
-                }
-                val code = connection.responseCode
-                val text = (if (code in 200..299) connection.inputStream else connection.errorStream)
-                    ?.bufferedReader()?.use(BufferedReader::readText).orEmpty()
-                if (code !in 200..299) {
-                    error(extractApiError(text) ?: "HTTP $code")
-                }
-                parseStories(text, topic, model)
-            } finally {
-                connection.disconnect()
-            }
+    fun listModels(config: AiClient.Config): List<String> {
+        val response = Http.request(
+            url = Http.join(config.baseUrl, "models?pageSize=200"),
+            method = "GET",
+            headers = headers(config),
+            readTimeoutMs = 30_000
+        )
+        val models = JSONObject(response).optJSONArray("models") ?: JSONArray()
+        val names = (0 until models.length()).mapNotNull { index ->
+            val model = models.getJSONObject(index)
+            val methods = model.optJSONArray("supportedGenerationMethods")
+            val supported = (0 until (methods?.length() ?: 0))
+                .any { methods!!.optString(it) == "generateContent" }
+            // Names come back as "models/gemini-2.5-flash".
+            model.optString("name").removePrefix("models/")
+                .takeIf { supported && it.isNotBlank() }
         }
+        return AiClient.sortModels(names)
     }
 
-    private fun requestBody(
-        topic: String,
-        count: Int,
-        language: String,
-        length: StoryLength
-    ) = JSONObject().apply {
-        val prompt = """
-            You are a news editor. Write $count distinct news articles about: "$topic".
-            Base them on what you know; keep them plausible, factual in tone and self-contained.
-            Language of the output: $language.
+    private fun headers(config: AiClient.Config) = buildMap {
+        if (config.apiKey.isNotBlank()) put("x-goog-api-key", config.apiKey)
+    }
 
-            For every item return:
-            - "short": a very short headline for a home screen widget, max ${Constants.SHORT_TITLE_MAX_CHARS} characters, no trailing period.
-            - "title": the full headline, max 120 characters.
-            - "body": the article itself — ${length.instruction}.
-
-            Format "body" with GitHub flavoured Markdown and use it generously:
-            **bold** for key facts and names, *italics* for emphasis, `##` and `###`
-            section headings, "- " bulleted lists, "1. " numbered lists, "> " for
-            quotes from people, --- for a separator and [text](https://url) links.
-            Separate paragraphs with a blank line. Do not wrap the whole body in a
-            code block and do not repeat the headline as the first line.
-        """.trimIndent()
-
+    private fun body(prompt: String, length: StoryLength) = JSONObject().apply {
         put("contents", JSONArray().put(JSONObject().apply {
             put("role", "user")
             put("parts", JSONArray().put(JSONObject().put("text", prompt)))
@@ -123,7 +55,7 @@ object GeminiClient {
             put("temperature", 0.9)
             put("maxOutputTokens", length.outputTokens)
             put("responseMimeType", "application/json")
-            // Ask for structured output so no fragile text parsing is needed.
+            // Structured output means no fragile text parsing.
             put("responseSchema", JSONObject().apply {
                 put("type", "ARRAY")
                 put("items", JSONObject().apply {
@@ -139,48 +71,28 @@ object GeminiClient {
         })
     }
 
-    private fun parseStories(response: String, topic: String, model: String): List<NewsItem> {
+    private fun extractText(response: String): String {
         val root = JSONObject(response)
         val candidates = root.optJSONArray("candidates")
-            ?: error(extractApiError(response) ?: "Empty response")
-        if (candidates.length() == 0) error("Model returned no candidates")
-        val parts = candidates.getJSONObject(0)
-            .optJSONObject("content")?.optJSONArray("parts")
-            ?: error("Model returned no content")
-        val text = buildString {
-            for (i in 0 until parts.length()) {
-                append(parts.getJSONObject(i).optString("text"))
-            }
-        }.trim().removeSurrounding("```json", "```").trim().removeSurrounding("```").trim()
-
-        val array = JSONArray(text)
-        val now = System.currentTimeMillis()
-        return (0 until array.length()).map { i ->
-            val o = array.getJSONObject(i)
-            val title = o.optString("title").ifBlank { o.optString("short") }
-            val short = o.optString("short").ifBlank { title }
-            NewsItem(
-                id = "${now}_$i",
-                shortTitle = trimShort(short),
-                title = title,
-                body = o.optString("body"),
-                source = "$topic · $model",
-                url = null,
-                // Keep the original order: the first story is the freshest.
-                timestamp = now - i
+        if (candidates == null || candidates.length() == 0) {
+            // A blocked prompt comes back with a reason instead of candidates.
+            val blocked = root.optJSONObject("promptFeedback")?.optString("blockReason")
+            throw Http.ApiException(
+                if (!blocked.isNullOrBlank()) "Blocked by the model: $blocked"
+                else "Model returned no candidates"
             )
-        }.filter { it.title.isNotBlank() }
+        }
+        val candidate = candidates.getJSONObject(0)
+        val parts = candidate.optJSONObject("content")?.optJSONArray("parts")
+        if (parts == null || parts.length() == 0) {
+            val finish = candidate.optString("finishReason")
+            throw Http.ApiException(
+                if (finish.isNotBlank()) "Model returned no content ($finish)"
+                else "Model returned no content"
+            )
+        }
+        return buildString {
+            for (i in 0 until parts.length()) append(parts.getJSONObject(i).optString("text"))
+        }
     }
-
-    private fun trimShort(raw: String): String {
-        val clean = raw.trim().trimEnd('.')
-        if (clean.length <= Constants.SHORT_TITLE_MAX_CHARS) return clean
-        val cut = clean.take(Constants.SHORT_TITLE_MAX_CHARS)
-        val lastSpace = cut.lastIndexOf(' ')
-        return (if (lastSpace > 20) cut.take(lastSpace) else cut).trimEnd(',', ';', ':') + "…"
-    }
-
-    private fun extractApiError(raw: String): String? = runCatching {
-        JSONObject(raw).getJSONObject("error").getString("message")
-    }.getOrNull()
 }

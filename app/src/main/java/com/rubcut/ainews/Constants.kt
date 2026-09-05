@@ -10,11 +10,4 @@ object Constants {
     const val SHORT_TITLE_MAX_CHARS = 42
 
     const val DEFAULT_TOPIC = "Artificial intelligence"
-    const val DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
-
-    val GEMINI_MODELS = listOf(
-        "gemini-2.5-flash",
-        "gemini-2.5-pro",
-        "gemini-2.0-flash"
-    )
 }

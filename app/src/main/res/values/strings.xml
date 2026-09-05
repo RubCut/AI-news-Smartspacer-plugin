@@ -14,16 +14,19 @@
     <string name="settings_topic_helper">For example: AI and robotics, Formula 1, space exploration</string>
     <string name="settings_provider_label">AI provider</string>
     <string name="settings_model_label">Model</string>
-    <string name="settings_key_label">Gemini API key</string>
-    <string name="settings_get_key">Get an API key</string>
+    <string name="settings_key_label">%1$s API key</string>
+    <string name="settings_key_optional">Optional for this provider</string>
+    <string name="settings_base_url_label">API base URL</string>
+    <string name="settings_base_url_helper">For example: http://192.168.1.10:11434/v1</string>
+    <string name="settings_get_key">Get a %1$s key</string>
     <string name="settings_test_key">Test key</string>
     <string name="settings_fetch_models">Fetch models</string>
     <string name="settings_testing">Testing key…</string>
     <string name="settings_fetching_models">Fetching models…</string>
     <string name="settings_section_topic">What to write about</string>
     <string name="settings_section_model">AI backend</string>
-    <string name="key_ok">Key works · %1$d models available</string>
-    <string name="key_failed">Key check failed: %1$s</string>
+    <string name="key_ok">Connection works · %1$d models available</string>
+    <string name="key_failed">Check failed: %1$s</string>
     <string name="models_loaded">Loaded %1$d models</string>
     <string name="models_empty">This key has no usable models</string>
     <string name="settings_language_label">Language of the stories</string>
@@ -38,6 +41,12 @@
     <string name="settings_save">Save and generate</string>
     <string name="settings_generating">Generating…</string>
 
+    <string name="about_title">About the plugin</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_description">AI News adds a Smartspacer target that writes the news for you. Enter a topic, pick an AI provider — Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen and other compatible APIs — and the model generates a short headline for your smartspace plus a full article you can read in a swipeable reader.</string>
+    <string name="about_disclaimer">Not an official product of Smartspacer or any AI provider. Generated stories may contain inaccuracies.</string>
+    <string name="about_repository">Open the repository on GitHub</string>
+
     <string name="status_updated">Generated %1$s · %2$d story(s) shown</string>
     <string name="status_never_generated">Nothing generated yet</string>
 
@@ -49,8 +58,11 @@
     <string name="toast_generated">Stories generated</string>
     <string name="toast_restored">Dismissed stories restored</string>
 
-    <string name="error_no_key">Add your Gemini API key in the settings</string>
+    <string name="error_no_key">Add your API key in the settings</string>
     <string name="error_no_topic">Set a topic in the settings</string>
+    <string name="error_no_base_url">Set the API base URL in the settings</string>
+    <string name="error_no_model">Pick a model in the settings</string>
+    <string name="error_no_browser">No app can open this link</string>
     <string name="error_empty_result">The model returned no stories</string>
     <string name="error_generation_failed">Generation failed: %1$s</string>
 

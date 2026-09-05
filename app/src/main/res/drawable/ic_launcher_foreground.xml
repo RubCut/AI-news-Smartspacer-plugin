@@ -1,11 +1,23 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <group android:scaleX="2.2" android:scaleY="2.2" android:translateX="27.6" android:translateY="27.6">
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <!-- Same artwork as docs/icon.svg, inset for the adaptive icon safe zone. -->
+    <group android:scaleX="0.62" android:scaleY="0.62" android:pivotX="256" android:pivotY="256">
         <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M20,3H4C2.9,3 2,3.9 2,5v14c0,1.1 0.9,2 2,2h16c1.1,0 2,-0.9 2,-2V5C22,3.9 21.1,3 20,3zM12,17H6v-2h6V17zM12,13H6v-2h6V13zM12,9H6V7h6V9zM18,17h-4v-2h4V17zM18,13h-4V7h4V13z" />
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="30"
+            android:pathData="M138,155 L374,155 A34,34 0 0 1 408,189 L408,323 A34,34 0 0 1 374,357 L138,357 A34,34 0 0 1 104,323 L104,189 A34,34 0 0 1 138,155 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M167,196 L264,196 A15,15 0 0 1 279,211 A15,15 0 0 1 264,226 L167,226 A15,15 0 0 1 152,211 A15,15 0 0 1 167,196 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M164,256 L267,256 A12,12 0 0 1 279,268 A12,12 0 0 1 267,280 L164,280 A12,12 0 0 1 152,268 A12,12 0 0 1 164,256 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M164,304 L216,304 A12,12 0 0 1 228,316 A12,12 0 0 1 216,328 L164,328 A12,12 0 0 1 152,316 A12,12 0 0 1 164,304 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M318,196 L342,196 A18,18 0 0 1 360,214 L360,310 A18,18 0 0 1 342,328 L318,328 A18,18 0 0 1 300,310 L300,214 A18,18 0 0 1 318,196 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M404,92 L414,118 L440,128 L414,138 L404,164 L394,138 L368,128 L394,118 Z" />
     </group>
 </vector>

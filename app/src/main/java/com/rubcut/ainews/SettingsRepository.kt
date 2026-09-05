@@ -32,6 +32,9 @@ class TargetSettings(
 
     private fun key(name: String) = "$smartspacerId.$name"
 
+    /** Namespaced so each provider keeps its own key, model and base URL. */
+    private fun providerKey(name: String) = "$smartspacerId.${aiProvider.id}.$name"
+
     /** What the model should write about, e.g. "AI and robotics". */
     var topic: String
         get() = prefs.getString(key("topic"), Constants.DEFAULT_TOPIC) ?: Constants.DEFAULT_TOPIC
@@ -41,14 +44,30 @@ class TargetSettings(
         get() = AiProvider.fromId(prefs.getString(key("provider"), null))
         set(value) = prefs.edit().putString(key("provider"), value.id).apply()
 
+    /**
+     * Keys, models and base URLs are stored per provider, so switching between
+     * backends and back keeps everything that was already typed in.
+     */
     var apiKey: String
-        get() = prefs.getString(key("api_key"), "").orEmpty()
-        set(value) = prefs.edit().putString(key("api_key"), value.trim()).apply()
+        get() = prefs.getString(providerKey("api_key"), "").orEmpty()
+        set(value) = prefs.edit().putString(providerKey("api_key"), value.trim()).apply()
 
     var model: String
-        get() = prefs.getString(key("model"), Constants.DEFAULT_GEMINI_MODEL)
-            ?: Constants.DEFAULT_GEMINI_MODEL
-        set(value) = prefs.edit().putString(key("model"), value).apply()
+        get() = prefs.getString(providerKey("model"), null)?.takeIf { it.isNotBlank() }
+            ?: aiProvider.defaultModel
+        set(value) = prefs.edit().putString(providerKey("model"), value.trim()).apply()
+
+    var baseUrl: String
+        get() = prefs.getString(providerKey("base_url"), null)?.takeIf { it.isNotBlank() }
+            ?: aiProvider.defaultBaseUrl
+        set(value) = prefs.edit().putString(providerKey("base_url"), value.trim()).apply()
+
+    /** Models fetched from the API for the current provider, if any. */
+    var cachedModels: List<String>
+        get() = prefs.getString(providerKey("models"), null)
+            ?.split('\n')?.filter { it.isNotBlank() }.orEmpty()
+        set(value) = prefs.edit()
+            .putString(providerKey("models"), value.joinToString("\n")).apply()
 
     /** Language the stories are written in; defaults to the device language. */
     var language: String
@@ -62,7 +81,10 @@ class TargetSettings(
         set(value) = prefs.edit().putString(key("length"), value.id).apply()
 
     val isConfigured: Boolean
-        get() = apiKey.isNotBlank() && topic.isNotBlank()
+        get() = topic.isNotBlank() &&
+            baseUrl.isNotBlank() &&
+            model.isNotBlank() &&
+            (apiKey.isNotBlank() || !aiProvider.requiresKey)
 
     var refreshIntervalMinutes: Int
         get() = prefs.getInt(key("interval"), Constants.DEFAULT_REFRESH_PERIOD_MINUTES)

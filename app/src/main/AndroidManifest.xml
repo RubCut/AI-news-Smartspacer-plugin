@@ -29,7 +29,7 @@
         <provider
             android:name=".targets.NewsTarget"
             android:authorities="${applicationId}.target.news"
-            android:permission="com.kieronquinn.app.smartspacer.permission.ACCESS_SMARTSPACER"
+            android:permission="com.kieronquinn.app.smartspacer.permission.ACCESS_SMARTSPACER_TARGETS"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.kieronquinn.app.smartspacer.TARGET" />

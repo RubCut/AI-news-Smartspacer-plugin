@@ -128,9 +128,11 @@ class PlainHttpTest {
                 "${server.baseUrl}/v1/chat/completions", "POST", emptyMap(), "{}"
             )
             assertEquals(401, response.status)
+            // The body arrives verbatim, which is what lets ApiErrors read the
+            // provider's own reason out of it. Extracting it is not checked here:
+            // org.json comes from the framework, and a JVM unit test only sees the
+            // stubbed android.jar.
             assertEquals(error, response.body)
-            // Which is what lets the settings screen show a reason, not a number.
-            assertEquals("invalid api key", ApiErrors.extract(error))
         }
     }
 

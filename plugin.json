@@ -1,7 +1,7 @@
 {
 	"description": "Adds an AI news target: type any topic and a model writes the news for you. Works with Gemini, Claude, OpenAI, DeepSeek, OpenRouter, Groq, Mistral, Grok, Qwen, Ollama...",
 	"download_url": "https://github.com/RubCut/AI-news-Smartspacer-plugin/releases/download/v1.1/AI-news-Smartspacer-plugin.apk",
-	"version_code": 1.1,
+	"version_code": 2,
 	"changelog": "**Local servers finally work.** Android 9+ refuses plain HTTP, and Ollama, llama.cpp or LM Studio speak nothing else.\n\n- `http://localhost:11434/v1` is allowed as it is \u2014 only the loopback hosts are whitelisted, so every hosted provider stays on HTTPS;\n- server on another machine? A new **Allow unencrypted connections** switch per target, off by default and confirmed before it turns on;\n- failures now say what went wrong, in your language and naming the host, instead of `Cleartext HTTP traffic to \u2026 not permitted`;\n- the base URL hint shows an example that actually works, and a local server needs no key at all.",
 	"required_package": "com.kieronquinn.app.smartspacer",
 	"minimum_smartspacer_version": 0,

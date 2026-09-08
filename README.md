@@ -105,8 +105,11 @@ every hosted provider still has to answer over HTTPS.
   `http://localhost:11434/v1`. Nothing to enable.
 - **Server on another machine** — a LAN address is not loopback, so plain HTTP to
   it stays refused unless you switch **Allow unencrypted connections** on in the
-  target's settings. The switch is per target and off by default: the key, the
-  prompt and the stories then cross the network in the clear.
+  target's settings. The switch is per target and off by default, and turning it
+  on asks twice: a dialog spells out that the key, the prompt and the stories
+  cross the network in the clear and can be read and altered on the way (backing
+  out of the dialog puts the switch back), and while the option is on the setting
+  keeps showing that warning in red under it.
 - **Either way**, TLS or a forwarded port keep the traffic encrypted:
   `https://…` for a server with a certificate, or
 

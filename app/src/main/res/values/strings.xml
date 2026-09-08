@@ -20,6 +20,11 @@
     <string name="settings_base_url_helper">For example: http://localhost:11434/v1 — http:// to another machine needs the switch below</string>
     <string name="settings_insecure_label">Allow unencrypted connections</string>
     <string name="settings_insecure_helper">Reaches a local server over plain http:// even where Android forbids it. The key and the stories then travel unencrypted — switch it on only for a network you control.</string>
+    <string name="settings_insecure_dialog_title">Allow unencrypted connections?</string>
+    <string name="settings_insecure_dialog_message">The API key, the topic and every generated story then cross the network in plain text — anyone on the same Wi-Fi, or anywhere along the way, can read them and change them, and the plugin has no way to notice. Switch this on only for a server you control, on a network you control.</string>
+    <string name="settings_insecure_dialog_enable">Allow anyway</string>
+    <string name="settings_insecure_dialog_keep">Keep it off</string>
+    <string name="settings_insecure_enabled">Unencrypted right now: the key and the stories go over the network in the clear.</string>
     <string name="settings_get_key">Get a %1$s key</string>
     <string name="settings_test_key">Test key</string>
     <string name="settings_fetch_models">Fetch models</string>

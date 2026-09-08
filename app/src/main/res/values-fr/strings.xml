@@ -20,6 +20,11 @@
     <string name="settings_base_url_helper">Par exemple : http://localhost:11434/v1 — le http:// vers une autre machine nécessite le bouton ci-dessous</string>
     <string name="settings_insecure_label">Autoriser les connexions non chiffrées</string>
     <string name="settings_insecure_helper">Joint un serveur local en http:// simple même si Android l’interdit. La clé et les textes circulent alors en clair : à n’activer que sur un réseau maîtrisé.</string>
+    <string name="settings_insecure_dialog_title">Autoriser les connexions non chiffrées ?</string>
+    <string name="settings_insecure_dialog_message">La clé API, le sujet et chaque article généré traverseront le réseau en clair : n’importe qui sur le même Wi-Fi, ou sur le chemin, peut les lire et les modifier, et le plugin ne le verra pas. À n’activer que pour un serveur et un réseau qui vous appartiennent.</string>
+    <string name="settings_insecure_dialog_enable">Autoriser quand même</string>
+    <string name="settings_insecure_dialog_keep">Laisser désactivé</string>
+    <string name="settings_insecure_enabled">Non chiffré pour l’instant : la clé et les articles circulent en clair.</string>
     <string name="settings_get_key">Obtenir une clé %1$s</string>
     <string name="settings_test_key">Tester la clé</string>
     <string name="settings_fetch_models">Charger les modèles</string>

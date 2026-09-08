@@ -20,6 +20,11 @@
     <string name="settings_base_url_helper">Наприклад: http://localhost:11434/v1 — http:// до іншої машини потребує перемикача нижче</string>
     <string name="settings_insecure_label">Дозволити незахищені з’єднання</string>
     <string name="settings_insecure_helper">Дозволяє звертатися до локального сервера звичайним http://, навіть якщо Android це блокує. Ключ і тексти йдуть без шифрування — вмикайте лише у власній мережі.</string>
+    <string name="settings_insecure_dialog_title">Дозволити незахищені з’єднання?</string>
+    <string name="settings_insecure_dialog_message">API-ключ, тема та всі згенеровані новини підуть мережею відкритим текстом: будь-хто у тій самій Wi-Fi або на шляху зможе їх прочитати й змінити, а плагін цього не помітить. Вмикайте лише для власного сервера у власній мережі.</string>
+    <string name="settings_insecure_dialog_enable">Все одно дозволити</string>
+    <string name="settings_insecure_dialog_keep">Залишити вимкненим</string>
+    <string name="settings_insecure_enabled">Зараз без шифрування: ключ і новини йдуть відкритим текстом.</string>
     <string name="settings_get_key">Отримати ключ %1$s</string>
     <string name="settings_test_key">Перевірити ключ</string>
     <string name="settings_fetch_models">Завантажити моделі</string>

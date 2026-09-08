@@ -17,6 +17,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.color.MaterialColors
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.R as MaterialR
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -62,6 +65,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var baseUrlField: TextInputEditText
     private lateinit var baseUrlLayout: TextInputLayout
     private lateinit var insecureRow: View
+    private lateinit var insecureCaption: TextView
     private lateinit var insecureSwitch: MaterialSwitch
     private lateinit var apiKeyLayout: TextInputLayout
     private lateinit var modelField: MaterialAutoCompleteTextView
@@ -80,6 +84,10 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var keyStatus: TextView
     private var availableModels: List<String> = emptyList()
 
+    /** Programmatic changes to the switch must not ask for confirmation again. */
+    private var settingInsecureSwitch = false
+    private var insecureDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         DynamicColors.applyToActivityIfAvailable(this)
         enableEdgeToEdge()
@@ -97,6 +105,7 @@ class SettingsActivity : AppCompatActivity() {
         baseUrlField = findViewById(R.id.baseUrlField)
         baseUrlLayout = findViewById(R.id.baseUrlLayout)
         insecureRow = findViewById(R.id.insecureRow)
+        insecureCaption = findViewById(R.id.insecureCaption)
         insecureSwitch = findViewById(R.id.insecureSwitch)
         apiKeyLayout = findViewById(R.id.apiKeyLayout)
         modelField = findViewById(R.id.modelField)
@@ -113,6 +122,8 @@ class SettingsActivity : AppCompatActivity() {
         fetchModelsButton = findViewById(R.id.buttonFetchModels)
         keyStatus = findViewById(R.id.keyStatus)
         getKeyButton = findViewById(R.id.buttonGetKey)
+
+        insecureSwitch.setOnCheckedChangeListener { _, checked -> onInsecureSwitchToggled(checked) }
 
         findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
         applyInsets()
@@ -265,7 +276,7 @@ class SettingsActivity : AppCompatActivity() {
         // Unencrypted traffic only ever makes sense for an address the user
         // types, and it applies to that one address.
         insecureRow.isVisible = provider.editableBaseUrl
-        insecureSwitch.isChecked = settings.allowInsecureHttp
+        setInsecureSwitch(settings.allowInsecureHttp)
         getKeyButton.text = getString(R.string.settings_get_key, provider.label)
         getKeyButton.isVisible = provider.apiKeyUrl.isNotBlank()
 
@@ -350,6 +361,66 @@ class SettingsActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+
+    /**
+     * The switch is the one place where the user turns a platform protection off,
+     * so it is confirmed rather than just flipped: a tap outside, or Back, counts
+     * as a refusal and puts the switch back.
+     */
+    private fun onInsecureSwitchToggled(checked: Boolean) {
+        if (settingInsecureSwitch) return
+        if (!checked) {
+            renderInsecureWarning(false)
+            return
+        }
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.settings_insecure_dialog_title)
+            .setMessage(R.string.settings_insecure_dialog_message)
+            .setIcon(R.drawable.ic_warning)
+            .setPositiveButton(R.string.settings_insecure_dialog_enable) { _, _ ->
+                renderInsecureWarning(true)
+            }
+            .setNegativeButton(R.string.settings_insecure_dialog_keep) { source, _ -> source.cancel() }
+            .setOnCancelListener { setInsecureSwitch(false) }
+            .create()
+        insecureDialog = dialog
+        dialog.setOnDismissListener { insecureDialog = null }
+        dialog.show()
+    }
+
+    override fun onDestroy() {
+        // A dialog outliving the screen it was built for leaks its window.
+        insecureDialog?.dismiss()
+        insecureDialog = null
+        super.onDestroy()
+    }
+
+    /** Sets the switch without tripping the confirmation, and updates the warning. */
+    private fun setInsecureSwitch(checked: Boolean) {
+        settingInsecureSwitch = true
+        insecureSwitch.isChecked = checked
+        settingInsecureSwitch = false
+        renderInsecureWarning(checked)
+    }
+
+    /**
+     * While the option is on, what it costs stays on screen — not just an
+     * explanation of what the switch does.
+     */
+    private fun renderInsecureWarning(enabled: Boolean) {
+        insecureCaption.setText(
+            if (enabled) R.string.settings_insecure_enabled else R.string.settings_insecure_helper
+        )
+        insecureCaption.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            if (enabled) R.drawable.ic_warning else 0, 0, 0, 0
+        )
+        insecureCaption.setTextColor(
+            MaterialColors.getColor(
+                insecureCaption,
+                if (enabled) MaterialR.attr.colorError else MaterialR.attr.colorOnSurfaceVariant
+            )
+        )
     }
 
     private fun showKeyStatus(text: String, isError: Boolean) {

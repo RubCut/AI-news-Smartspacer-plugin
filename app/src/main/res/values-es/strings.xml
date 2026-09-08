@@ -20,6 +20,11 @@
     <string name="settings_base_url_helper">Por ejemplo: http://localhost:11434/v1 — el http:// a otro equipo necesita el interruptor de abajo</string>
     <string name="settings_insecure_label">Permitir conexiones sin cifrado</string>
     <string name="settings_insecure_helper">Accede a un servidor local por http:// sin cifrado aunque Android lo impida. La clave y las noticias viajan sin cifrar: actívalo solo en una red de confianza.</string>
+    <string name="settings_insecure_dialog_title">¿Permitir conexiones sin cifrado?</string>
+    <string name="settings_insecure_dialog_message">La clave de API, el tema y cada noticia generada cruzarán la red en texto plano: cualquiera de la misma Wi-Fi, o en el camino, puede leerlas y modificarlas sin que el plugin se dé cuenta. Actívalo solo para un servidor tuyo en una red tuya.</string>
+    <string name="settings_insecure_dialog_enable">Permitir igualmente</string>
+    <string name="settings_insecure_dialog_keep">Mantener apagado</string>
+    <string name="settings_insecure_enabled">Ahora sin cifrado: la clave y las noticias viajan en texto plano.</string>
     <string name="settings_get_key">Obtener una clave de %1$s</string>
     <string name="settings_test_key">Probar la clave</string>
     <string name="settings_fetch_models">Cargar modelos</string>

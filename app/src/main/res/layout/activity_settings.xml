@@ -177,6 +177,36 @@
                             android:maxLines="2" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Plain HTTP to a host outside the device is refused by the
+                         platform, so it is opted into per target and only shown
+                         for the providers whose address is editable. -->
+                    <LinearLayout
+                        android:id="@+id/insecureRow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/insecureSwitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_insecure_label"
+                            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+
+                        <TextView
+                            android:id="@+id/insecureCaption"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:drawablePadding="4dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/settings_insecure_helper"
+                            android:textColor="?android:attr/textColorSecondary" />
+                    </LinearLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/apiKeyLayout"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"

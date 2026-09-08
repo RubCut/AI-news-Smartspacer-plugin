@@ -17,7 +17,14 @@
     <string name="settings_key_label">%1$s API-Schlüssel</string>
     <string name="settings_key_optional">Für diesen Anbieter optional</string>
     <string name="settings_base_url_label">API-Basis-URL</string>
-    <string name="settings_base_url_helper">Zum Beispiel: http://192.168.1.10:11434/v1</string>
+    <string name="settings_base_url_helper">Zum Beispiel: http://localhost:11434/v1 — http:// an einen anderen Rechner braucht den Schalter unten</string>
+    <string name="settings_insecure_label">Unverschlüsselte Verbindungen erlauben</string>
+    <string name="settings_insecure_helper">Lokale Server über reines http:// erreichen, auch wenn Android es verbietet. Schlüssel und Texte laufen dann unverschlüsselt — nur in einem eigenen Netzwerk einschalten.</string>
+    <string name="settings_insecure_dialog_title">Unverschlüsselte Verbindungen erlauben?</string>
+    <string name="settings_insecure_dialog_message">API-Schlüssel, Thema und alle generierten Texte gehen dann im Klartext durchs Netz — jeder im selben WLAN oder auf dem Weg kann sie lesen und verändern, und das Plugin merkt es nicht. Schalte das nur für einen eigenen Server in einem eigenen Netz ein.</string>
+    <string name="settings_insecure_dialog_enable">Trotzdem erlauben</string>
+    <string name="settings_insecure_dialog_keep">Aus lassen</string>
+    <string name="settings_insecure_enabled">Gerade unverschlüsselt: Schlüssel und Texte gehen im Klartext raus.</string>
     <string name="settings_get_key">%1$s-Schlüssel holen</string>
     <string name="settings_test_key">Schlüssel testen</string>
     <string name="settings_fetch_models">Modelle laden</string>
@@ -65,6 +72,7 @@
     <string name="error_no_browser">Keine App kann diesen Link öffnen</string>
     <string name="error_empty_result">Das Modell hat keine Nachrichten geliefert</string>
     <string name="error_generation_failed">Generierung fehlgeschlagen: %1$s</string>
+    <string name="error_cleartext_blocked">Klartext-HTTP ist nur an localhost erlaubt, die Anfrage an %1$s wurde blockiert. Erlaube unverschlüsselte Verbindungen in den Einstellungen, nutze eine https://-URL oder leite den Port mit adb reverse weiter.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d Minute</item>

@@ -17,7 +17,14 @@
     <string name="settings_key_label">Chave de API do %1$s</string>
     <string name="settings_key_optional">Opcional para este provedor</string>
     <string name="settings_base_url_label">URL base da API</string>
-    <string name="settings_base_url_helper">Por exemplo: http://192.168.1.10:11434/v1</string>
+    <string name="settings_base_url_helper">Por exemplo: http://localhost:11434/v1 — http:// para outra máquina exige a chave abaixo</string>
+    <string name="settings_insecure_label">Permitir conexões sem criptografia</string>
+    <string name="settings_insecure_helper">Acessa um servidor local por http:// sem criptografia mesmo quando o Android bloqueia. A chave e os textos trafegam sem criptografia — ative só em uma rede confiável.</string>
+    <string name="settings_insecure_dialog_title">Permitir conexões sem criptografia?</string>
+    <string name="settings_insecure_dialog_message">A chave da API, o tema e cada notícia gerada atravessam a rede em texto puro: qualquer pessoa na mesma Wi-Fi, ou no caminho, pode ler e alterar tudo isso sem que o plugin perceba. Ative apenas para um servidor seu, em uma rede sua.</string>
+    <string name="settings_insecure_dialog_enable">Permitir mesmo assim</string>
+    <string name="settings_insecure_dialog_keep">Deixar desativado</string>
+    <string name="settings_insecure_enabled">Agora sem criptografia: a chave e os textos trafegam em texto puro.</string>
     <string name="settings_get_key">Obter uma chave do %1$s</string>
     <string name="settings_test_key">Testar a chave</string>
     <string name="settings_fetch_models">Carregar modelos</string>
@@ -65,6 +72,7 @@
     <string name="error_no_browser">Nenhum aplicativo pode abrir este link</string>
     <string name="error_empty_result">O modelo não retornou nenhuma notícia</string>
     <string name="error_generation_failed">Falha na geração: %1$s</string>
+    <string name="error_cleartext_blocked">HTTP sem criptografia só é permitido para localhost, então a requisição para %1$s foi bloqueada. Permita conexões sem criptografia nas configurações, use uma URL https:// ou encaminhe a porta com adb reverse.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d minuto</item>

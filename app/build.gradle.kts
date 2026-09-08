@@ -36,11 +36,16 @@ android {
         minSdk = 29
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1"
     }
 
     buildFeatures {
         buildConfig = true
+    }
+
+    testOptions {
+        // The unit tests exercise plain JVM code; nothing to stub out.
+        unitTests.isReturnDefaultValues = true
     }
 
     signingConfigs {
@@ -89,4 +94,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    testImplementation("junit:junit:4.13.2")
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android 9 and newer refuse plain HTTP unless the app says otherwise, which
+    used to break every local backend: Ollama, llama.cpp, LM Studio, a server
+    running in Termux or a port forwarded over `adb reverse` all speak http://.
+
+    Only the loopback hosts are whitelisted here, so hosted providers — Gemini,
+    Claude, OpenAI, DeepSeek and the rest — still cannot be reached over an
+    unencrypted connection. `10.0.2.2` is the emulator's alias for the loopback
+    of the machine running it, which is where a desktop Ollama is listening.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

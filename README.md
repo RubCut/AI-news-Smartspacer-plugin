@@ -91,7 +91,50 @@ several show a `5 stories to read` summary instead.
 4. Tap **Test key** to verify it, then **Fetch models** to load the models it can use.
 
 For **Ollama** or a **custom** endpoint, enter the base URL instead
-(for example `http://192.168.1.10:11434/v1`); the key can be left empty.
+(for example `http://localhost:11434/v1`); the key can be left empty.
+
+### Local servers
+
+Ollama, llama.cpp, LM Studio and friends usually serve plain HTTP, which Android
+blocks since API 28. Traffic to the device itself — `localhost`, `127.0.0.1` and
+the emulator alias `10.0.2.2` — is allowed outright through a domain scoped
+[network security config](app/src/main/res/xml/network_security_config.xml), so
+every hosted provider still has to answer over HTTPS.
+
+- **Server on the phone** (Termux, UserLAnd) or on the emulator:
+  `http://localhost:11434/v1`. Nothing to enable.
+- **Server on another machine** — a LAN address is not loopback, so plain HTTP to
+  it stays refused unless you switch **Allow unencrypted connections** on in the
+  target's settings. The switch is per target and off by default, and turning it
+  on asks twice: a dialog spells out that the key, the prompt and the stories
+  cross the network in the clear and can be read and altered on the way (backing
+  out of the dialog puts the switch back), and while the option is on the setting
+  keeps showing that warning in red under it.
+- **Either way**, TLS or a forwarded port keep the traffic encrypted:
+  `https://…` for a server with a certificate, or
+
+  ```bash
+  adb reverse tcp:11434 tcp:11434   # then use http://localhost:11434/v1
+  ```
+
+A refused request is reported as a readable, translated error naming the host,
+not as a framework exception.
+
+### Checking it without a model
+
+[`tools/mock-ai-server.py`](tools/mock-ai-server.py) is a stdlib-only stand-in for
+a local server: it answers the model list and returns two canned stories, so you
+can watch a request arrive and a full refresh complete without Ollama or an API
+key.
+
+```bash
+python3 tools/mock-ai-server.py --port 11434
+adb reverse tcp:11434 tcp:11434
+# settings → base URL http://localhost:11434/v1 → Test key → Fetch models → Save
+```
+
+Point it at a LAN address instead and drop the `adb reverse` line, and the same
+script exercises the **Allow unencrypted connections** path.
 
 ## Installation
 
@@ -159,6 +202,9 @@ happens in the background receiver, or on demand when you save the settings.
 - the API key, topic, settings and generated stories are stored locally in
   `SharedPreferences` — per target instance;
 - only the topic, language and length are sent to the provider you picked;
+- requests are cleartext only where you asked for it: the loopback hosts, or a
+  local server behind **Allow unencrypted connections**. Hosted providers always
+  go over HTTPS, and that cannot be switched off;
 - removing a target wipes its settings and its stories.
 
 ## Project structure
@@ -173,6 +219,7 @@ app/src/main/java/com/rubcut/ainews/
 ├── GeminiClient.kt             # Gemini generateContent
 ├── AnthropicClient.kt          # Claude /messages
 ├── OpenAiClient.kt             # OpenAI-compatible /chat/completions
+├── PlainHttp.kt              # plain HTTP over a socket, for the opt-in switch
 ├── NewsPrompt.kt               # the shared prompt
 ├── NewsJsonParser.kt           # tolerant JSON → stories
 ├── StoryLength.kt              # prompt wording and token budget per length

@@ -35,10 +35,11 @@ object NewsUpdater {
         val items = result.getOrNull()
         return when {
             items == null -> {
+                val failure = result.exceptionOrNull()
                 settings.setError(
                     context.getString(
                         R.string.error_generation_failed,
-                        result.exceptionOrNull()?.message ?: "unknown"
+                        failure?.let { ApiErrors.messageFor(context, it) } ?: "unknown"
                     )
                 )
                 false
@@ -62,5 +63,6 @@ fun TargetSettings.toClientConfig() = AiClient.Config(
     provider = aiProvider,
     baseUrl = baseUrl,
     apiKey = apiKey,
-    model = model
+    model = model,
+    allowInsecureHttp = allowInsecureHttp
 )

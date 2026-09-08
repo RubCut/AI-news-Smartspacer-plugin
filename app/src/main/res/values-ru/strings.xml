@@ -17,7 +17,14 @@
     <string name="settings_key_label">API-ключ %1$s</string>
     <string name="settings_key_optional">Для этого провайдера необязателен</string>
     <string name="settings_base_url_label">Базовый URL API</string>
-    <string name="settings_base_url_helper">Например: http://192.168.1.10:11434/v1</string>
+    <string name="settings_base_url_helper">Например: http://localhost:11434/v1 — http:// к другой машине требует переключатель ниже</string>
+    <string name="settings_insecure_label">Разрешить незащищённые соединения</string>
+    <string name="settings_insecure_helper">Позволяет обращаться к локальному серверу по обычному http://, даже если Android это запрещает. Ключ и тексты идут без шифрования — включайте только в своей сети.</string>
+    <string name="settings_insecure_dialog_title">Разрешить незащищённые соединения?</string>
+    <string name="settings_insecure_dialog_message">API-ключ, тема и все сгенерированные новости пойдут по сети открытым текстом: любой в той же Wi-Fi или на пути сможет их прочитать и изменить, и плагин этого не заметит. Включайте только для своего сервера в своей сети.</string>
+    <string name="settings_insecure_dialog_enable">Всё равно разрешить</string>
+    <string name="settings_insecure_dialog_keep">Оставить выключенным</string>
+    <string name="settings_insecure_enabled">Сейчас без шифрования: ключ и новости идут открытым текстом.</string>
     <string name="settings_get_key">Получить ключ %1$s</string>
     <string name="settings_test_key">Проверить ключ</string>
     <string name="settings_fetch_models">Загрузить модели</string>
@@ -65,6 +72,7 @@
     <string name="error_no_browser">Нет приложения для открытия ссылки</string>
     <string name="error_empty_result">Модель не вернула ни одной новости</string>
     <string name="error_generation_failed">Ошибка генерации: %1$s</string>
+    <string name="error_cleartext_blocked">Обычный HTTP разрешён только к localhost, поэтому запрос к %1$s был заблокирован. Разрешите незащищённые соединения в настройках, используйте https:// или пробросьте порт через adb reverse.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d минута</item>

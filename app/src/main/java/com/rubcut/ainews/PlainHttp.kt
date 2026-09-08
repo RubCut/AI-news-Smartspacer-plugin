@@ -91,11 +91,12 @@ internal object PlainHttp {
         return try {
             socket.connect(InetSocketAddress(host, port), connectTimeoutMs)
             socket.soTimeout = readTimeoutMs
-            socket.getOutputStream().use { output ->
-                output.write(request.toByteArray(Charsets.UTF_8))
-                if (payload != null) output.write(payload)
-                output.flush()
-            }
+            // Deliberately not closed after writing: on a socket, closing the
+            // output stream closes the connection, and the answer would be lost.
+            val output = socket.getOutputStream()
+            output.write(request.toByteArray(Charsets.UTF_8))
+            if (payload != null) output.write(payload)
+            output.flush()
             socket.getInputStream().readResponse()
         } finally {
             runCatching { socket.close() }

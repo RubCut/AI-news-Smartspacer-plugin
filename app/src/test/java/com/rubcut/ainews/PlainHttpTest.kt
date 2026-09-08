@@ -48,10 +48,9 @@ class PlainHttpTest {
                 val request = connection.getInputStream().readRequest()
                 requests += request
                 val raw = respond(request, hits.incrementAndGet())
-                connection.getOutputStream().use { output ->
-                    output.write(raw.toByteArray(Charsets.UTF_8))
-                    output.flush()
-                }
+                val output = connection.getOutputStream()
+                output.write(raw.toByteArray(Charsets.UTF_8))
+                output.flush()
             }
         }
 

@@ -67,6 +67,16 @@ class TargetSettings(
             ?: aiProvider.defaultBaseUrl
         set(value) = prefs.edit().putString(providerKey("base_url"), value.trim()).apply()
 
+    /**
+     * Plain HTTP to a server outside the device, which Android refuses by
+     * default. Opt in per provider, next to the base URL it applies to, and off
+     * by default: everything sent this way — the key included — is readable by
+     * anyone on the path.
+     */
+    var allowInsecureHttp: Boolean
+        get() = prefs.getBoolean(providerKey("allow_insecure"), false)
+        set(value) = prefs.edit().putBoolean(providerKey("allow_insecure"), value).apply()
+
     /** Models fetched from the API for the current provider, if any. */
     var cachedModels: List<String>
         get() = prefs.getString(providerKey("models"), null)

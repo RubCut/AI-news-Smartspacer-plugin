@@ -43,6 +43,11 @@ android {
         buildConfig = true
     }
 
+    testOptions {
+        // The unit tests exercise plain JVM code; nothing to stub out.
+        unitTests.isReturnDefaultValues = true
+    }
+
     signingConfigs {
         create("shared") {
             storeFile = keystoreFile
@@ -89,4 +94,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    testImplementation("junit:junit:4.13.2")
 }

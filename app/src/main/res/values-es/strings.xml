@@ -17,7 +17,9 @@
     <string name="settings_key_label">Clave API de %1$s</string>
     <string name="settings_key_optional">Opcional para este proveedor</string>
     <string name="settings_base_url_label">URL base de la API</string>
-    <string name="settings_base_url_helper">Por ejemplo: http://localhost:11434/v1 — el http:// sin cifrado solo funciona con localhost</string>
+    <string name="settings_base_url_helper">Por ejemplo: http://localhost:11434/v1 — el http:// a otro equipo necesita el interruptor de abajo</string>
+    <string name="settings_insecure_label">Permitir conexiones sin cifrado</string>
+    <string name="settings_insecure_helper">Accede a un servidor local por http:// sin cifrado aunque Android lo impida. La clave y las noticias viajan sin cifrar: actívalo solo en una red de confianza.</string>
     <string name="settings_get_key">Obtener una clave de %1$s</string>
     <string name="settings_test_key">Probar la clave</string>
     <string name="settings_fetch_models">Cargar modelos</string>
@@ -65,7 +67,7 @@
     <string name="error_no_browser">Ninguna aplicación puede abrir este enlace</string>
     <string name="error_empty_result">El modelo no devolvió ninguna noticia</string>
     <string name="error_generation_failed">Fallo en la generación: %1$s</string>
-    <string name="error_cleartext_blocked">El HTTP sin cifrado solo se permite a localhost, por eso se bloqueó la petición a %1$s. Usa una URL https:// o reenvía el puerto con adb reverse.</string>
+    <string name="error_cleartext_blocked">El HTTP sin cifrado solo se permite a localhost, por eso se bloqueó la petición a %1$s. Permite las conexiones sin cifrado en los ajustes, usa una URL https:// o reenvía el puerto con adb reverse.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d minuto</item>

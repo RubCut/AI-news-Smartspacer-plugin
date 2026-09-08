@@ -17,7 +17,9 @@
     <string name="settings_key_label">%1$s API-Schlüssel</string>
     <string name="settings_key_optional">Für diesen Anbieter optional</string>
     <string name="settings_base_url_label">API-Basis-URL</string>
-    <string name="settings_base_url_helper">Zum Beispiel: http://localhost:11434/v1 — reines http:// funktioniert nur mit localhost</string>
+    <string name="settings_base_url_helper">Zum Beispiel: http://localhost:11434/v1 — http:// an einen anderen Rechner braucht den Schalter unten</string>
+    <string name="settings_insecure_label">Unverschlüsselte Verbindungen erlauben</string>
+    <string name="settings_insecure_helper">Lokale Server über reines http:// erreichen, auch wenn Android es verbietet. Schlüssel und Texte laufen dann unverschlüsselt — nur in einem eigenen Netzwerk einschalten.</string>
     <string name="settings_get_key">%1$s-Schlüssel holen</string>
     <string name="settings_test_key">Schlüssel testen</string>
     <string name="settings_fetch_models">Modelle laden</string>
@@ -65,7 +67,7 @@
     <string name="error_no_browser">Keine App kann diesen Link öffnen</string>
     <string name="error_empty_result">Das Modell hat keine Nachrichten geliefert</string>
     <string name="error_generation_failed">Generierung fehlgeschlagen: %1$s</string>
-    <string name="error_cleartext_blocked">Klartext-HTTP ist nur an localhost erlaubt, die Anfrage an %1$s wurde blockiert. Nutze eine https://-URL oder leite den Port mit adb reverse weiter.</string>
+    <string name="error_cleartext_blocked">Klartext-HTTP ist nur an localhost erlaubt, die Anfrage an %1$s wurde blockiert. Erlaube unverschlüsselte Verbindungen in den Einstellungen, nutze eine https://-URL oder leite den Port mit adb reverse weiter.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d Minute</item>

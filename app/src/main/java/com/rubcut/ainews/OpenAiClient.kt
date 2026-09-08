@@ -34,6 +34,7 @@ internal object OpenAiClient {
             url = Http.join(config.baseUrl, "models"),
             method = "GET",
             headers = headers(config),
+            allowInsecureHttp = config.allowInsecureHttp,
             readTimeoutMs = 30_000
         )
         val root = JSONObject(response)
@@ -57,6 +58,7 @@ internal object OpenAiClient {
         url = Http.join(config.baseUrl, "chat/completions"),
         method = "POST",
         headers = headers(config),
+        allowInsecureHttp = config.allowInsecureHttp,
         body = JSONObject().apply {
             put("model", config.model)
             put("temperature", 0.9)

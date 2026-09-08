@@ -63,5 +63,6 @@ fun TargetSettings.toClientConfig() = AiClient.Config(
     provider = aiProvider,
     baseUrl = baseUrl,
     apiKey = apiKey,
-    model = model
+    model = model,
+    allowInsecureHttp = allowInsecureHttp
 )

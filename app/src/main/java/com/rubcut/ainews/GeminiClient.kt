@@ -17,6 +17,7 @@ internal object GeminiClient {
             url = url,
             method = "POST",
             headers = headers(config),
+            allowInsecureHttp = config.allowInsecureHttp,
             body = body(prompt, length).toString()
         )
         return NewsJsonParser.parse(extractText(response), source)
@@ -27,6 +28,7 @@ internal object GeminiClient {
             url = Http.join(config.baseUrl, "models?pageSize=200"),
             method = "GET",
             headers = headers(config),
+            allowInsecureHttp = config.allowInsecureHttp,
             readTimeoutMs = 30_000
         )
         val models = JSONObject(response).optJSONArray("models") ?: JSONArray()

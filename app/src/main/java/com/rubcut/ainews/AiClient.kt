@@ -17,7 +17,9 @@ object AiClient {
         val provider: AiProvider,
         val baseUrl: String,
         val apiKey: String,
-        val model: String
+        val model: String,
+        /** Plain HTTP to a server the user owns, past the platform's refusal. */
+        val allowInsecureHttp: Boolean = false
     )
 
     suspend fun generate(

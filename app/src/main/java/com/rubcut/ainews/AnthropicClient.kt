@@ -18,6 +18,7 @@ internal object AnthropicClient {
             url = Http.join(config.baseUrl, "messages"),
             method = "POST",
             headers = headers(config),
+            allowInsecureHttp = config.allowInsecureHttp,
             body = JSONObject().apply {
                 put("model", config.model)
                 put("max_tokens", length.outputTokens)
@@ -39,6 +40,7 @@ internal object AnthropicClient {
             url = Http.join(config.baseUrl, "models?limit=200"),
             method = "GET",
             headers = headers(config),
+            allowInsecureHttp = config.allowInsecureHttp,
             readTimeoutMs = 30_000
         )
         val data = JSONObject(response).optJSONArray("data") ?: JSONArray()

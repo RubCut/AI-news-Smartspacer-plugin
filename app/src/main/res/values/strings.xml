@@ -17,7 +17,9 @@
     <string name="settings_key_label">%1$s API key</string>
     <string name="settings_key_optional">Optional for this provider</string>
     <string name="settings_base_url_label">API base URL</string>
-    <string name="settings_base_url_helper">For example: http://localhost:11434/v1 — plain http:// works only for localhost</string>
+    <string name="settings_base_url_helper">For example: http://localhost:11434/v1 — http:// to another machine needs the switch below</string>
+    <string name="settings_insecure_label">Allow unencrypted connections</string>
+    <string name="settings_insecure_helper">Reaches a local server over plain http:// even where Android forbids it. The key and the stories then travel unencrypted — switch it on only for a network you control.</string>
     <string name="settings_get_key">Get a %1$s key</string>
     <string name="settings_test_key">Test key</string>
     <string name="settings_fetch_models">Fetch models</string>
@@ -65,7 +67,7 @@
     <string name="error_no_browser">No app can open this link</string>
     <string name="error_empty_result">The model returned no stories</string>
     <string name="error_generation_failed">Generation failed: %1$s</string>
-    <string name="error_cleartext_blocked">Plain http:// is allowed only to localhost, so the request to %1$s was blocked. Use an https:// URL, or forward the port with adb reverse.</string>
+    <string name="error_cleartext_blocked">Plain http:// is allowed only to localhost, so the request to %1$s was blocked. Allow unencrypted connections in the settings, use an https:// URL, or forward the port with adb reverse.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d minute</item>

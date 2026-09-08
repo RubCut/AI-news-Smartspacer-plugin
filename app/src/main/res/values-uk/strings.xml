@@ -17,7 +17,9 @@
     <string name="settings_key_label">API-ключ %1$s</string>
     <string name="settings_key_optional">Для цього провайдера необов’язковий</string>
     <string name="settings_base_url_label">Базова URL-адреса API</string>
-    <string name="settings_base_url_helper">Наприклад: http://localhost:11434/v1 — звичайний http:// працює лише з localhost</string>
+    <string name="settings_base_url_helper">Наприклад: http://localhost:11434/v1 — http:// до іншої машини потребує перемикача нижче</string>
+    <string name="settings_insecure_label">Дозволити незахищені з’єднання</string>
+    <string name="settings_insecure_helper">Дозволяє звертатися до локального сервера звичайним http://, навіть якщо Android це блокує. Ключ і тексти йдуть без шифрування — вмикайте лише у власній мережі.</string>
     <string name="settings_get_key">Отримати ключ %1$s</string>
     <string name="settings_test_key">Перевірити ключ</string>
     <string name="settings_fetch_models">Завантажити моделі</string>
@@ -65,7 +67,7 @@
     <string name="error_no_browser">Немає застосунку для відкриття посилання</string>
     <string name="error_empty_result">Модель не повернула жодної новини</string>
     <string name="error_generation_failed">Помилка генерації: %1$s</string>
-    <string name="error_cleartext_blocked">Звичайний HTTP дозволений лише до localhost, тому запит до %1$s заблоковано. Використовуйте https:// або пробросьте порт через adb reverse.</string>
+    <string name="error_cleartext_blocked">Звичайний HTTP дозволений лише до localhost, тому запит до %1$s заблоковано. Дозвольте незахищені з’єднання в налаштуваннях, використовуйте https:// або пробросьте порт через adb reverse.</string>
 
     <plurals name="minutes">
         <item quantity="one">%d хвилина</item>

@@ -23,6 +23,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
 import com.kieronquinn.app.smartspacer.sdk.provider.SmartspacerTargetProvider
@@ -60,6 +61,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var providerField: MaterialAutoCompleteTextView
     private lateinit var baseUrlField: TextInputEditText
     private lateinit var baseUrlLayout: TextInputLayout
+    private lateinit var insecureRow: View
+    private lateinit var insecureSwitch: MaterialSwitch
     private lateinit var apiKeyLayout: TextInputLayout
     private lateinit var modelField: MaterialAutoCompleteTextView
     private lateinit var intervalSlider: Slider
@@ -93,6 +96,8 @@ class SettingsActivity : AppCompatActivity() {
         providerField = findViewById(R.id.providerField)
         baseUrlField = findViewById(R.id.baseUrlField)
         baseUrlLayout = findViewById(R.id.baseUrlLayout)
+        insecureRow = findViewById(R.id.insecureRow)
+        insecureSwitch = findViewById(R.id.insecureSwitch)
         apiKeyLayout = findViewById(R.id.apiKeyLayout)
         modelField = findViewById(R.id.modelField)
         intervalSlider = findViewById(R.id.intervalSlider)
@@ -214,6 +219,7 @@ class SettingsActivity : AppCompatActivity() {
         settings.apiKey = apiKeyField.text?.toString().orEmpty()
         settings.baseUrl = baseUrlField.text?.toString()
             ?.takeIf { it.isNotBlank() } ?: settings.aiProvider.defaultBaseUrl
+        settings.allowInsecureHttp = insecureSwitch.isChecked
         settings.model = modelField.text?.toString()
             ?.takeIf { it.isNotBlank() } ?: settings.aiProvider.defaultModel
         settings.refreshIntervalMinutes = intervalSlider.value.roundToInt()
@@ -256,6 +262,10 @@ class SettingsActivity : AppCompatActivity() {
             getString(R.string.settings_key_optional)
         }
         baseUrlLayout.isVisible = provider.editableBaseUrl
+        // Unencrypted traffic only ever makes sense for an address the user
+        // types, and it applies to that one address.
+        insecureRow.isVisible = provider.editableBaseUrl
+        insecureSwitch.isChecked = settings.allowInsecureHttp
         getKeyButton.text = getString(R.string.settings_get_key, provider.label)
         getKeyButton.isVisible = provider.apiKeyUrl.isNotBlank()
 

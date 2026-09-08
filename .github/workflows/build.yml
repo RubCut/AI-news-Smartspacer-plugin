@@ -26,9 +26,9 @@ jobs:
         with:
           gradle-version: '8.13'
 
-      - name: Build debug APK
+      - name: Build debug APK and run the unit tests
         id: build
-        run: set -o pipefail; gradle assembleDebug 2>&1 | tee build.log
+        run: set -o pipefail; gradle testDebugUnitTest assembleDebug 2>&1 | tee build.log
 
       - name: Report build failure
         if: failure()

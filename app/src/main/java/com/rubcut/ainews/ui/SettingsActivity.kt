@@ -28,6 +28,7 @@ import com.kieronquinn.app.smartspacer.sdk.SmartspacerConstants
 import com.kieronquinn.app.smartspacer.sdk.provider.SmartspacerTargetProvider
 import com.rubcut.ainews.AiClient
 import com.rubcut.ainews.AiProvider
+import com.rubcut.ainews.ApiErrors
 import com.rubcut.ainews.BuildConfig
 import com.rubcut.ainews.Constants
 import com.rubcut.ainews.NewsUpdater
@@ -355,7 +356,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun Throwable.readableMessage() =
-        message?.takeIf { it.isNotBlank() } ?: this::class.java.simpleName
+        ApiErrors.messageFor(this@SettingsActivity, this)
 
     private fun save() {
         persistFields()

@@ -91,7 +91,27 @@ several show a `5 stories to read` summary instead.
 4. Tap **Test key** to verify it, then **Fetch models** to load the models it can use.
 
 For **Ollama** or a **custom** endpoint, enter the base URL instead
-(for example `http://192.168.1.10:11434/v1`); the key can be left empty.
+(for example `http://localhost:11434/v1`); the key can be left empty.
+
+### Local servers
+
+Ollama, llama.cpp, LM Studio and friends usually serve plain HTTP, which Android
+blocks since API 28. The plugin allows unencrypted traffic to the device itself
+only — `localhost`, `127.0.0.1` and the emulator alias `10.0.2.2` — through a
+domain scoped
+[network security config](app/src/main/res/xml/network_security_config.xml), so
+every hosted provider still has to answer over HTTPS.
+
+- **Server on the phone** (Termux, UserLAnd): `http://localhost:11434/v1`.
+- **Server on your desktop** — either give it TLS and use `https://…`, or forward
+  the port over USB and talk to it as if it were local:
+
+  ```bash
+  adb reverse tcp:11434 tcp:11434   # then use http://localhost:11434/v1
+  ```
+
+A refused cleartext request is reported as a readable error in the settings,
+not as a framework exception.
 
 ## Installation
 

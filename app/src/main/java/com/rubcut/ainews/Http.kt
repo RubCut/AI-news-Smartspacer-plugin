@@ -1,6 +1,7 @@
 package com.rubcut.ainews
 
 import java.io.BufferedReader
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -9,6 +10,15 @@ internal object Http {
 
     class ApiException(message: String) : Exception(message)
 
+    /**
+     * The platform refused an unencrypted request, because the host is not one of
+     * the loopback entries in `res/xml/network_security_config.xml`. It is reported
+     * as its own type so the UI can explain it in the app's language instead of
+     * printing a framework message.
+     */
+    class CleartextBlocked(val host: String) :
+        IOException("Cleartext HTTP traffic to $host not permitted")
+
     fun request(
         url: String,
         method: String,
@@ -16,7 +26,8 @@ internal object Http {
         body: String? = null,
         readTimeoutMs: Int = 120_000
     ): String {
-        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+        val target = URL(url)
+        val connection = (target.openConnection() as HttpURLConnection).apply {
             requestMethod = method
             connectTimeout = 20_000
             readTimeout = readTimeoutMs
@@ -38,6 +49,8 @@ internal object Http {
                 throw ApiException(ApiErrors.extract(text) ?: "HTTP $code")
             }
             return text
+        } catch (error: IOException) {
+            throw error.orCleartextBlocked(target.host)
         } finally {
             connection.disconnect()
         }
@@ -46,4 +59,12 @@ internal object Http {
     /** Joins a base URL and a path without doubling or dropping the slash. */
     fun join(baseUrl: String, path: String): String =
         baseUrl.trimEnd('/') + "/" + path.trimStart('/')
+
+    /** Names the platform's own cleartext refusal, which arrives as a plain IOException. */
+    private fun IOException.orCleartextBlocked(host: String?): IOException =
+        if (host != null && message?.contains("cleartext", ignoreCase = true) == true) {
+            CleartextBlocked(host)
+        } else {
+            this
+        }
 }

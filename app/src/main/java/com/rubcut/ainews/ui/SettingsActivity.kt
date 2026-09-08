@@ -418,7 +418,9 @@ class SettingsActivity : AppCompatActivity() {
         insecureCaption.setTextColor(
             MaterialColors.getColor(
                 insecureCaption,
-                if (enabled) MaterialR.attr.colorError else MaterialR.attr.colorOnSurfaceVariant
+                // colorError is AppCompat's attribute, colorOnSurfaceVariant Material's.
+                if (enabled) androidx.appcompat.R.attr.colorError
+                else MaterialR.attr.colorOnSurfaceVariant
             )
         )
     }
